@@ -1,9 +1,39 @@
 ---
+import { loadProfile } from '../lib/profile';
+import { splitName } from '../components/profile-view';
+import '../styles/global.css';
+
 interface Props {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
+  noindex?: boolean;
 }
-const { title = 'Personal Site', description = 'Personal branding site for the multi-agent course' } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
+
+const profile = loadProfile();
+const { primary, alternate } = splitName(profile.name);
+
+// JSON-LD Person: only the public fields approved in D8. No email, jobTitle,
+// worksFor, address, image, and nothing from the guestbook.
+const person: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: primary,
+  ...(alternate ? { alternateName: alternate } : {}),
+  ...(profile.headline ? { description: profile.headline } : {}),
+  url: Astro.site ? new URL('/', Astro.site).href : undefined,
+  ...(profile.interests.length ? { knowsAbout: profile.interests } : {}),
+};
+const jsonLd = JSON.stringify(person).replace(/</g, '\\u003c');
+
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/', label: 'หน้าแรก', active: path === '/' },
+  { href: '/about', label: 'เกี่ยวกับฉัน', active: path.startsWith('/about') },
+  { href: '/interests', label: 'สิ่งที่สนใจ', active: path.startsWith('/interests') },
+  { href: '/contact', label: 'ติดต่อ', active: path.startsWith('/contact') },
+  { href: '/guestbook', label: 'สมุดเยี่ยม', active: path.startsWith('/guestbook') },
+];
 ---
 <!doctype html>
 <html lang="th">
@@ -11,63 +41,34 @@ const { title = 'Personal Site', description = 'Personal branding site for the m
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <style is:global>
-      :root {
-        --bg: #0b1020;
-        --card: #141a2f;
-        --text: #eef2ff;
-        --muted: #a5b4d4;
-        --accent: #7c9cff;
-        --border: #243056;
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: "Segoe UI", system-ui, sans-serif;
-        background: radial-gradient(circle at top, #17203a, var(--bg) 45%);
-        color: var(--text);
-        min-height: 100vh;
-      }
-      a { color: var(--accent); text-decoration: none; }
-      a:hover { text-decoration: underline; }
-      main { width: min(920px, 92vw); margin: 0 auto; padding: 2rem 0 4rem; }
-      .card {
-        background: color-mix(in srgb, var(--card) 92%, white 8%);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 1.25rem 1.5rem;
-        margin: 1rem 0;
-      }
-      nav {
-        display: flex; gap: 1rem; flex-wrap: wrap;
-        width: min(920px, 92vw); margin: 0 auto; padding: 1.25rem 0;
-        border-bottom: 1px solid var(--border);
-      }
-      nav a { color: var(--muted); font-weight: 600; }
-      nav a[aria-current="page"] { color: var(--text); }
-      h1, h2 { line-height: 1.2; }
-      p, li { color: var(--muted); line-height: 1.6; }
-      input, textarea, button {
-        font: inherit; border-radius: 10px; border: 1px solid var(--border);
-        background: #0f1528; color: var(--text); padding: 0.7rem 0.9rem; width: 100%;
-      }
-      button { background: var(--accent); color: #081018; font-weight: 700; cursor: pointer; width: auto; }
-      label { display: block; margin: 0.75rem 0 0.35rem; color: var(--text); font-weight: 600; }
-      .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    </style>
+    <script type="application/ld+json" is:inline set:html={jsonLd} />
   </head>
   <body>
-    <nav aria-label="หลัก">
-      <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>Home</a>
-      <a href="/about" aria-current={Astro.url.pathname.startsWith('/about') ? 'page' : undefined}>About</a>
-      <a href="/interests" aria-current={Astro.url.pathname.startsWith('/interests') ? 'page' : undefined}>Interests</a>
-      <a href="/contact" aria-current={Astro.url.pathname.startsWith('/contact') ? 'page' : undefined}>Contact</a>
-      <a href="/guestbook" aria-current={Astro.url.pathname.startsWith('/guestbook') ? 'page' : undefined}>Guestbook</a>
-    </nav>
-    <main>
+    <a class="skip-link" href="#main">ข้ามไปที่เนื้อหา</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/">{primary}</a>
+        <nav aria-label="เมนูหลัก">
+          <ul>
+            {nav.map((item) => (
+              <li>
+                <a href={item.href} aria-current={item.active ? 'page' : undefined}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="wrap">
       <slot />
     </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>© {new Date().getFullYear()} {primary}</p>
+      </div>
+    </footer>
   </body>
 </html>

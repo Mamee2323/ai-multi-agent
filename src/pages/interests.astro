@@ -2,15 +2,24 @@
 export const prerender = false;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadProfile } from '../lib/profile';
-const profile = loadProfile();
----
-<BaseLayout title={`Interests · ${profile.name}`}>
-  <section class="card">
-    <h1>Interests</h1>
-    <ul>
-      {profile.interests.map((item) => <li>{item}</li>)}
-    </ul>
-    <p>อัปเดตรายการสิ่งที่สนใจเร็ว ๆ นี้</p>
-  </section>
-</BaseLayout>
+import { splitName, toInterests } from '../components/profile-view';
 
+const profile = loadProfile();
+const { primary } = splitName(profile.name);
+const interests = toInterests(profile.interests);
+---
+<BaseLayout
+  title={`สิ่งที่สนใจ · ${primary}`}
+  description={interests.length ? `หัวข้อที่ ${primary} กำลังหัดและตั้งใจจะเล่า: ${profile.interests.join(', ')}` : `หัวข้อที่ ${primary} กำลังหัดและตั้งใจจะเล่า`}
+>
+  <header class="card">
+    <h1>สิ่งที่ฉันสนใจ</h1>
+    {interests.length > 0 && <p>นี่คือหัวข้อที่ฉันกำลังลองเรียนรู้อยู่ค่ะ ลองแล้วได้อะไรมา จะค่อย ๆ มาเล่าไว้ตรงนี้นะคะ</p>}
+  </header>
+  {interests.map((item) => (
+    <section class="card interest-section" aria-labelledby={item.slug}>
+      <h2 id={item.slug}>{item.label}</h2>
+      {item.finance && <p class="disclaimer">ไม่ใช่คำแนะนำการลงทุน</p>}
+    </section>
+  ))}
+</BaseLayout>

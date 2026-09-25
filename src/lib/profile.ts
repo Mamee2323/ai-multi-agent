@@ -17,13 +17,16 @@ export type Profile = {
  * FALLBACK renders publicly when docs/PROFILE.md is missing or a section is
  * empty — keep it course-free (no lab references); learner hints belong in
  * comments and docs, not in rendered fallback text.
+ * D12: neutral Thai only — the owner's display name, and empty headline /
+ * bio / interests so pages hide those sections instead of showing filler
+ * such as "Personal branding site" or "coming soon".
  */
 const FALLBACK: Profile = {
-  name: 'Your Name',
-  headline: 'Personal branding site',
-  bio: 'This personal site is still being built — content is coming soon.',
-  audience: 'Hiring managers / peers / community',
-  interests: ['AI agents', 'Web', 'Teaching'],
+  name: '13หมาหมี',
+  headline: '',
+  bio: '',
+  audience: '',
+  interests: [],
 };
 
 function profilePath(): string {

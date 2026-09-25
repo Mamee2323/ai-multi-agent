@@ -54,14 +54,47 @@
 | [#4](https://github.com/Mamee2323/ai-multi-agent/issues/4) | [D5][D6] FE: Guestbook textContent + noindex · Contact ซ่อน placeholder | D5, D6 | Claude `frontend` · 04 | gh |
 | [#5](https://github.com/Mamee2323/ai-multi-agent/issues/5) | [D6] BE: Guestbook limits + LIMIT + honeypot + วิธีลบ | D6 | OpenCode `backend` · 05 | gh |
 | [#6](https://github.com/Mamee2323/ai-multi-agent/issues/6) | [D5] BE: Contact length limit + ไม่ echo email | D5 | OpenCode `backend` · 05 | gh |
-| (รอ) | [D8] JSON-LD Person + meta description | D8 | Claude `frontend` · 04 | **GitHub MCP** — body: `issue-bodies/07-fe-seo-jsonld.md` |
+| [#8](https://github.com/Mamee2323/ai-multi-agent/issues/8) | [D8] JSON-LD Person + meta description | D8 | Claude `frontend` · 04 | **GitHub MCP** (headless `claude -p`) |
+| [#9](https://github.com/Mamee2323/ai-multi-agent/issues/9) | [D5][D6] Guestbook v1 + rate limit · Contact บันทึก SQLite (ซ้อน #5/#6 · rate limit ยังไม่มี decision) | D5, D6 | OpenCode `backend` · 05 | **GitHub MCP** (interactive) |
 
 D7 (Now) เลื่อนเป็น Should → ไม่เปิด issue ใน v1
 
 ## Lab 03 — MCP vs gh
 
-- **ความเร็ว:** `gh issue create --body-file` สร้าง 6 ใบในคำสั่งเดียว ไม่ต้องรอ tool call ทีละรอบ · MCP ช้ากว่าเล็กน้อยแต่ agent ร่าง + สร้างจบในบทสนทนาเดียว
-- **สิทธิ์:** `gh` ใช้ keyring login ของเครื่อง (สิทธิ์เต็มบัญชี) · MCP ใช้ PAT ใน `.env` ผ่าน `.mcp.json` — ควรเป็น fine-grained PAT เฉพาะ repo นี้ + scope Issues
-- **Audit trail:** ทั้งคู่สร้าง issue ในชื่อบัญชีเดียวกัน · `gh` มีประวัติคำสั่งใน shell · MCP มีบันทึกใน transcript ของ Claude — แต่ไม่มีทางไหนบอกบน GitHub ว่า agent เป็นคนสร้าง (เขียนใน body เองถ้าต้องการ)
-- **ข้อผิดพลาดที่เจอ:** MCP ต่อไม่ติด (`Authorization header is badly formatted`) เพราะเปิด `claude` ก่อนโหลด `GITHUB_PERSONAL_ACCESS_TOKEN` → `${...}` ใน `.mcp.json` ว่าง ได้ `Bearer ` เปล่า · แก้: โหลด `.env` เข้า env แล้วเปิด `claude` ใหม่ · `gh` ใช้ได้ทันทีเพราะ login ไว้แล้ว
-- **เมื่อไหร่ใช้อะไร:** งาน batch / script / CI → `gh` · งานที่ agent ต้องอ่านเอกสารแล้วตัดสินใจเนื้อหา issue เอง หรือต้องอ่าน issue/PR ต่อในบทสนทนา → MCP · ร่าง body เป็นไฟล์ก่อน (`issue-bodies/`) ใช้ได้กับทั้งสองทาง
+- **ความเร็ว:** `gh issue create --body-file` สร้าง 6 ใบในคำสั่งเดียว (#1–#6) ไม่ต้องรอ tool call ทีละรอบ · `gh issue create --web` เปิดฟอร์มที่กรอกไว้แล้วให้คนกด Submit เอง จึงยังเป็น draft · MCP ช้ากว่า (ต้องโหลด tool schema แล้วค่อยเรียกทีละ call) แต่ agent ร่าง สร้าง แก้ (#9) และอ่านต่อได้ในบทสนทนาเดียว
+- **สิทธิ์:** `gh` ใช้ keyring login ของเครื่อง (สิทธิ์เต็มบัญชี) · MCP ใช้ PAT จาก env var `GITHUB_PERSONAL_ACCESS_TOKEN` ผ่าน `${...}` ใน `.mcp.json` (gitignore) — ควรเป็น fine-grained PAT เฉพาะ repo นี้ + scope Issues · เครื่องใช้ร่วม: ตั้ง env var เฉพาะ session (`Read-Host`) ห้าม `setx` ห้ามเขียน token ลงไฟล์
+- **Audit trail:** ทั้งคู่สร้าง issue ในชื่อบัญชีเดียวกัน · `gh` มีประวัติคำสั่งใน shell · MCP มีบันทึกใน transcript ของ Claude — แต่ไม่มีทางไหนบอกบน GitHub ว่า agent เป็นคนสร้าง (เขียนใน body เองถ้าต้องการ) · ตาราง Issues ด้านบนบันทึกคอลัมน์ "สร้างผ่าน" ไว้แทน
+- **ข้อผิดพลาดที่เจอ:** MCP ต่อไม่ติด (`HTTP 400 · Authorization header is badly formatted`) เพราะเปิด `claude` ก่อนมี `GITHUB_PERSONAL_ACCESS_TOKEN` ใน env → ได้ `Bearer ` เปล่า · แก้: ตั้ง env var ใน terminal เดิม → `claude --continue` → `/mcp` · #8 ใช้ headless `claude -p` ที่ตั้ง token แล้ว · #9 ใช้ MCP แบบ interactive แต่ body ที่วางมาอ้าง D-id ผิด (D2 แทน D5/D6) และซ้อน #5/#6 — agent สร้างตามสั่งได้เร็ว แต่ต้องเทียบกับ DECISIONS ก่อน · `gh` ใช้ได้ทันทีเพราะ login ไว้แล้ว
+- **เมื่อไหร่ใช้อะไร:** งาน batch / script / CI → `gh` · อยากตรวจก่อน publish → `gh issue create --web` · งานที่ agent ต้องอ่านเอกสาร ตัดสินใจเนื้อหาเอง หรืออ่าน/แก้ issue และ PR ต่อในบทสนทนา → MCP · ทั้งสองทาง: `search`/`list` หา issue ซ้ำก่อนสร้าง และร่าง body เป็นไฟล์ก่อน (`issue-bodies/`)
+
+## รอบ 2 (Teams) — 2026-09-25
+
+> ต่อท้าย ไม่แก้ D1–D9 (issues #1–#8 และ PR #7 อ้างอยู่) · ที่มา: `docs/DEBATE.md` หัวข้อ `## รอบ 2 — จำลองทีม (Teams)`
+
+### สรุปการโต้วาที
+
+ทีมไม่เปลี่ยนการตัดสินใจเดิม แต่ชี้ช่องว่างหลัง UI เสร็จ Brand อยากให้เว็บมีเหตุผลให้กลับมา (ส่วน Now) แต่ Devil's Advocate กับ UX เห็นตรงกันว่า Now ที่ต้องแก้ parser และไม่มีวันที่กำกับ เสี่ยงกลายเป็นหลักฐานว่าเว็บร้าง จึงเลื่อนไว้หลัง ship พร้อมเงื่อนไข ประเด็นที่ทั้งสามเห็นพ้องว่าเป็น blocker คือฟอร์ม Contact ที่เจ้าของยังไม่มีทางอ่าน ส่วน UX เพิ่มเกณฑ์มือถือ และ Devil เพิ่มเรื่อง FALLBACK กับ robots
+
+### การตัดสินใจ (ตาราง)
+
+| ID | หัวข้อ | ตัดสินใจ | เหตุผลสั้น | ใครเสนอ (Brand/UX/Devil) |
+|----|--------|----------|------------|---------------------------|
+| D10 | อ่าน/ลบข้อความ Contact | BE ทำ script อ่านและลบข้อความ Contact (แบบเดียวกับ guestbook ใน D6 — ไม่มี endpoint สาธารณะ) · retention เริ่มต้น 90 วันด้วย script ลบของเก่า · **ห้าม ship ถ้ายังไม่มีวิธีอ่าน** · จังหวะอ่าน (เริ่มต้นสัปดาห์ละครั้ง) และ retention ให้เจ้าของยืนยันใน L4 | ฟอร์มที่ไม่มีใครอ่านทำร้าย brand มากกว่าไม่มีฟอร์ม | Devil + Brand |
+| D11 | ส่วน Now | คงเลื่อน (D7) จนหลัง ship · เมื่อทำ: heading `## Now` + วันที่อัปเดตใน PROFILE · แสดงวันที่คู่เสมอ · ซ่อนอัตโนมัติเมื่อเก่ากว่า 60 วัน · ต้องมี D-id ใหม่ + แก้ parser + เทสต์ | ความสดใหม่ต้องซื่อสัตย์ และไม่พึ่งวินัยคนอัปเดต | Brand + UX + Devil |
+| D12 | FALLBACK ของ `profile.ts` | เปลี่ยนเป็นข้อความไทยกลาง ๆ (เช่น ชื่อ "13หมาหมี", headline/bio ว่างให้หน้าซ่อน section) · ห้าม "Personal branding site", ข้อความอังกฤษ "coming soon", ข้อความคอร์ส · ทำก่อน Lab 08 (L8) | FALLBACK render สู่สาธารณะเมื่อ PROFILE หาย | Devil + UX |
+| D13 | Robots / การ index | ให้ index หน้าเนื้อหา · `/guestbook` คง `noindex` (D6) · เพิ่ม `robots.txt` กัน `/api/` และ `/guestbook` · `llms.txt` ยังเลื่อน (Nice) | อ่านง่ายสำหรับ agent โดยไม่ส่งเนื้อหาของคนอื่นให้ crawler | Devil + Brand |
+| D14 | มือถือ | ที่ความกว้าง 360px: ไม่มี scroll แนวนอน · nav 5 รายการตัดบรรทัดหรือย่อได้ · headline ตัดบรรทัดอ่านง่าย · ตรวจใน Lab 06 (Playwright) | กลุ่มเพื่อนส่วนใหญ่เปิดจากมือถือ | UX |
+
+ไม่มีการแก้ `docs/PROFILE.md` ในรอบนี้
+
+### สิ่งที่เลื่อนออก (เพิ่มเติม)
+
+- ส่วน Now + parser ใหม่ (D11) → หลัง ship
+- หน้า inbox / แจ้งเตือนทางอีเมลเมื่อมีข้อความ Contact → หลัง v1 (v1 ใช้ script ตาม D10)
+- `llms.txt`
+
+### เกณฑ์เพิ่มเติม (ตรวจใน Lab 05–06 และก่อน Lab 08)
+
+- Lab 05 (BE): script อ่าน/ลบข้อความ Contact + ลบของเก่ากว่า 90 วัน (D10) — เพิ่มเข้า scope ของ #6 หรือเปิด issue ใหม่
+- Lab 06 (QA): ทุกหน้าที่ 360px ไม่มี scroll แนวนอน · nav ใช้งานได้ (D14)
+- ก่อน Lab 08: FALLBACK ตาม D12 · มี `robots.txt` ตาม D13 · เจ้าของตอบ L4 แล้ว (D10)

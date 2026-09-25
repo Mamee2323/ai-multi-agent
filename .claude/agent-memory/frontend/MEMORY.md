@@ -1,0 +1,1 @@
+- [UI conventions](project_ui_conventions.md) — interest slug map, theme tokens/AA, honeypot `website`, inlined /api/ in scripts, fallback leak risk

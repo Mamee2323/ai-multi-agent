@@ -1,5 +1,5 @@
 ## Context
-จาก [`docs/DECISIONS.md`](https://github.com/Mamee2323/ai-multi-agent/blob/main/docs/DECISIONS.md) **D6** (Guestbook) — ส่วน BE · OPEN_LOOPS L2 · Owner: OpenCode `backend` · ปิดใน Lab 05 · รายละเอียด: `docs/handoffs/05-claude-to-opencode.md`
+จาก [`docs/DECISIONS.md`](https://github.com/Mamee2323/ai-multi-agent/blob/main/docs/DECISIONS.md) **D6** (Guestbook) — ส่วน BE · OPEN_LOOPS L2 · Owner: OpenCode `backend` · ปิดใน Lab 05 · รายละเอียด: `docs/handoffs/04-claude-to-opencode.md`
 
 ## Acceptance
 - [ ] จำกัดความยาว `name` / `message` ฝั่ง server ใน `db.ts` (เสนอ 40 / 500)
