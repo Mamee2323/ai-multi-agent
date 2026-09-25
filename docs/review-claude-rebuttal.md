@@ -57,4 +57,4 @@
 
 - [x] docs/STATUS.md
 - [x] docs/OPEN_LOOPS.md
-- [ ] docs/DECISIONS.md (D15 ร่างไว้ — รอ human อนุมัติ)
+- [x] docs/DECISIONS.md — D15 เพิ่มแล้วหลังเจ้าของเว็บอนุมัติ · issue #12

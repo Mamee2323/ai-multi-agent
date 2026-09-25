@@ -13,6 +13,7 @@ Updated by: Claude `frontend` (Lab 07 review)
 ## Done
 
 - Lab 00 init · Lab 01 PROFILE (parser อ่าน section หลายบรรทัดได้แล้ว — `ca5204e`)
+- D15 rate limit ข้าม v1 (อนุมัติ 2026-09-25) → issue #12 P2
 - Lab 02: `DEBATE.md` ครบ 3 มุม + D10–D14 · `DECISIONS.md` D1–D9
 - Lab 03: issues #1–#6 + #8 · `## Lab 03 — MCP vs gh` ใน DECISIONS
 - Lab 04: UI 5 หน้า + D12–D14 — **PR #7 merged** (`ebc9573`)
@@ -39,7 +40,7 @@ Updated by: Claude `frontend` (Lab 07 review)
 ## Next actions
 
 1. OpenCode Round 2 close → โพสต์สรุปบน PR #11 → merge
-2. human: อนุมัติ D15 (L13) · L4 · L9 ก่อน Lab 08
+2. human: L4 · L9 ก่อน Lab 08 (D15 อนุมัติแล้ว → issue #12)
 3. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
 
 ## Files changed in latest session
