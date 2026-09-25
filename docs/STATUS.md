@@ -3,16 +3,17 @@
 > คัดลอกเป็น `docs/STATUS.md` ใน Lab 00 · อ่านทุก session · **สั้น** · single-writer ต่อรอบ  
 > ดู [`COURSE.md`](../COURSE.md) ชั้น State (Hot)
 
-Last updated: 2026-09-25 15:30 +07:00  
-Updated by: Claude `frontend` (Lab 05b swarm รอบ 2)
+Last updated: 2026-09-25 16:05 +07:00  
+Updated by: Claude `frontend` (Lab 07 review)
 
 ## Current goal
 
-- Lab 04 + Lab 05 **merge ขึ้น main แล้ว** — ถัดไป Lab 06 QA (Claude/Playwright)
+- Lab 07 cross-model review PR #11 — OpenCode approve (ไม่มี Must) · Claude แก้ Should 3 + Nit 4 แล้ว · รอบ 2 ข้าม (human ตัดสิน · opencode ค้าง) · PR comment โพสต์แล้ว → รอ human ยืนยัน merge
 
 ## Done
 
 - Lab 00 init · Lab 01 PROFILE (parser อ่าน section หลายบรรทัดได้แล้ว — `ca5204e`)
+- D15 rate limit ข้าม v1 (อนุมัติ 2026-09-25) → issue #12 P2
 - Lab 02: `DEBATE.md` ครบ 3 มุม + D10–D14 · `DECISIONS.md` D1–D9
 - Lab 03: issues #1–#6 + #8 · `## Lab 03 — MCP vs gh` ใน DECISIONS
 - Lab 04: UI 5 หน้า + D12–D14 — **PR #7 merged** (`ebc9573`)
@@ -25,11 +26,12 @@ Updated by: Claude `frontend` (Lab 05b swarm รอบ 2)
   - M6 `scripts/guestbook-delete.mjs <id>` + `scripts/contact-manage.mjs list|delete|purge [--days 90]` (D10)
   - เทสต์ใหม่ `tests/api-safeguards.test.ts` (9 tests · รันใน CI) · smoke จริงผ่าน curl (201/400/200 ตรงสัญญา)
 - Lab 05b swarm: รอบ 1 OpenCode 7/20 (API) · รอบ 2 Claude 15/20 (ฟอร์มจริงในเบราว์เซอร์ทุกเคสผ่าน) — `docs/SWARM.md`
+- Lab 06 QA: E2E ผ่าน Playwright MCP 16/16 step (5 หน้า · ฟอร์ม contact/guestbook demo · 360px ไม่มี scroll แนวนอน · skip link) · a11y debate + action items P0/P1/P2 ใน `docs/QA.md`
 - Issues: #5, #6 ปิดโดย PR #10 (state: completed) · #9 ปิดเป็น superseded (not_planned · rate limit ไปตัดสินที่ L13)
 
 ## In progress
 
-- — (รอเริ่ม Lab 06)
+- PR #11 รอ merge (human ยืนยัน)
 
 ## Blocked
 
@@ -37,12 +39,13 @@ Updated by: Claude `frontend` (Lab 05b swarm รอบ 2)
 
 ## Next actions
 
-1. Lab 06 QA (Claude/Playwright): E2E ใน `playwright/` (ต่อยอดเคสจาก `SWARM.md` รอบ 2 · browser: `npx playwright install` หรือ `channel: 'msedge'`) + ตัดสิน #9→L13 (rate limit ยังไม่มี D-id) ที่ review
-2. ตรวจ a11y + มือถือ 360px ทั้ง 5 หน้า (L12)
+1. merge PR #11 → Lab 08 Ship
+2. human: L4 · L9 ก่อน Lab 08 (D15 อนุมัติแล้ว → issue #12)
+3. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
 
 ## Files changed in latest session
 
-- ไม่มีการแก้โค้ด — `docs/SWARM.md` (รอบ 2) · ไฟล์นี้ + OPEN_LOOPS
+- Lab 07: `playwright.config.ts` (webServer + temp `DATA_DIR` + `PW_CHANNEL`) · `playwright/smoke.spec.ts` · `src/pages/contact.astro` + `guestbook.astro` (`input` listener · `.hp`) · `docs/QA.md` · `docs/review-*.md` · ไฟล์นี้ + OPEN_LOOPS
 
 ## Notes
 

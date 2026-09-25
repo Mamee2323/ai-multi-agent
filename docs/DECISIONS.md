@@ -98,3 +98,11 @@ D7 (Now) เลื่อนเป็น Should → ไม่เปิด issue �
 - Lab 05 (BE): script อ่าน/ลบข้อความ Contact + ลบของเก่ากว่า 90 วัน (D10) — เพิ่มเข้า scope ของ #6 หรือเปิด issue ใหม่
 - Lab 06 (QA): ทุกหน้าที่ 360px ไม่มี scroll แนวนอน · nav ใช้งานได้ (D14)
 - ก่อน Lab 08: FALLBACK ตาม D12 · มี `robots.txt` ตาม D13 · เจ้าของตอบ L4 แล้ว (D10)
+
+## Lab 07 — Cross-model review (PR #11) — 2026-09-25
+
+> ต่อท้าย ไม่แก้ D1–D14 · ที่มา: `docs/review-opencode.md` (ความเห็น L13) + `docs/review-claude-rebuttal.md` · เจ้าของเว็บอนุมัติ 2026-09-25 · ปิด L13 (ต่อจาก #9 ที่ปิด not_planned)
+
+| ID | หัวข้อ | ตัดสินใจ | เหตุผลสั้น | ใครเสนอ |
+|----|--------|----------|------------|---------|
+| D15 | Rate limit | **ไม่ทำใน v1** · กันด้วย length limit (D5/D6) + honeypot + `LIMIT 50` + script ลบ (D10) · **trigger กลับมาทำ:** ก่อนโปรโมตเว็บสาธารณะ หรือเจอสแปมจริง · เมื่อทำ: in-memory sliding window ต่อ IP ใน `src/pages/api/*` (BE) + ข้อความ 429 ของตัวเองใน FE (ตอนนี้ 429 จะตกไปข้อความ "เช็คข้อมูล" ซึ่งผิดความหมาย) + ตัดสินเรื่อง trust `X-Forwarded-For` หลัง proxy | สแปมที่หลุดมา "รก" ไม่ใช่ "พัง" · กลุ่มเป้าหมายเล็ก (D14) + guestbook `noindex` (D13) · ทำให้ถูกต้องแก้ทั้ง BE และ FE พร้อมกัน | OpenCode (reviewer) + Claude |
