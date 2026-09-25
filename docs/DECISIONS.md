@@ -61,11 +61,11 @@ D7 (Now) เลื่อนเป็น Should → ไม่เปิด issue �
 
 ## Lab 03 — MCP vs gh
 
-- **ความเร็ว:** `gh issue create --body-file` สร้าง 6 ใบในคำสั่งเดียว ไม่ต้องรอ tool call ทีละรอบ · MCP ช้ากว่าเล็กน้อยแต่ agent ร่าง + สร้างจบในบทสนทนาเดียว
-- **สิทธิ์:** `gh` ใช้ keyring login ของเครื่อง (สิทธิ์เต็มบัญชี) · MCP ใช้ PAT ใน `.env` ผ่าน `.mcp.json` — ควรเป็น fine-grained PAT เฉพาะ repo นี้ + scope Issues
-- **Audit trail:** ทั้งคู่สร้าง issue ในชื่อบัญชีเดียวกัน · `gh` มีประวัติคำสั่งใน shell · MCP มีบันทึกใน transcript ของ Claude — แต่ไม่มีทางไหนบอกบน GitHub ว่า agent เป็นคนสร้าง (เขียนใน body เองถ้าต้องการ)
-- **ข้อผิดพลาดที่เจอ:** MCP ต่อไม่ติด (`Authorization header is badly formatted`) เพราะเปิด `claude` ก่อนโหลด `GITHUB_PERSONAL_ACCESS_TOKEN` → `${...}` ใน `.mcp.json` ว่าง ได้ `Bearer ` เปล่า · แก้: โหลด `.env` เข้า env ก่อนเปิด `claude` — ครั้งนี้ใช้ headless `claude -p --allowedTools mcp__github…` ใน shell ที่ export token แล้ว สร้าง #8 ได้โดยไม่ต้องปิดเซสชันหลัก · `gh` ใช้ได้ทันทีเพราะ login ไว้แล้ว
-- **เมื่อไหร่ใช้อะไร:** งาน batch / script / CI → `gh` · งานที่ agent ต้องอ่านเอกสารแล้วตัดสินใจเนื้อหา issue เอง หรือต้องอ่าน issue/PR ต่อในบทสนทนา → MCP · ร่าง body เป็นไฟล์ก่อน (`issue-bodies/`) ใช้ได้กับทั้งสองทาง
+- **ความเร็ว:** `gh issue create --body-file` สร้าง 6 ใบในคำสั่งเดียว (#1–#6) ไม่ต้องรอ tool call ทีละรอบ · `gh issue create --web` เปิดฟอร์มที่กรอกไว้แล้วให้คนกด Submit เอง จึงยังเป็น draft · MCP ช้ากว่า (ต้องโหลด tool schema แล้วค่อยเรียกทีละ call) แต่ agent ร่าง สร้าง แก้ (#9) และอ่านต่อได้ในบทสนทนาเดียว
+- **สิทธิ์:** `gh` ใช้ keyring login ของเครื่อง (สิทธิ์เต็มบัญชี) · MCP ใช้ PAT จาก env var `GITHUB_PERSONAL_ACCESS_TOKEN` ผ่าน `${...}` ใน `.mcp.json` (gitignore) — ควรเป็น fine-grained PAT เฉพาะ repo นี้ + scope Issues · เครื่องใช้ร่วม: ตั้ง env var เฉพาะ session (`Read-Host`) ห้าม `setx` ห้ามเขียน token ลงไฟล์
+- **Audit trail:** ทั้งคู่สร้าง issue ในชื่อบัญชีเดียวกัน · `gh` มีประวัติคำสั่งใน shell · MCP มีบันทึกใน transcript ของ Claude — แต่ไม่มีทางไหนบอกบน GitHub ว่า agent เป็นคนสร้าง (เขียนใน body เองถ้าต้องการ) · ตาราง Issues ด้านบนบันทึกคอลัมน์ "สร้างผ่าน" ไว้แทน
+- **ข้อผิดพลาดที่เจอ:** MCP ต่อไม่ติด (`HTTP 400 · Authorization header is badly formatted`) เพราะเปิด `claude` ก่อนมี `GITHUB_PERSONAL_ACCESS_TOKEN` ใน env → ได้ `Bearer ` เปล่า · แก้: ตั้ง env var ใน terminal เดิม → `claude --continue` → `/mcp` · #8 ใช้ headless `claude -p` ที่ตั้ง token แล้ว · #9 ใช้ MCP แบบ interactive แต่ body ที่วางมาอ้าง D-id ผิด (D2 แทน D5/D6) และซ้อน #5/#6 — agent สร้างตามสั่งได้เร็ว แต่ต้องเทียบกับ DECISIONS ก่อน · `gh` ใช้ได้ทันทีเพราะ login ไว้แล้ว
+- **เมื่อไหร่ใช้อะไร:** งาน batch / script / CI → `gh` · อยากตรวจก่อน publish → `gh issue create --web` · งานที่ agent ต้องอ่านเอกสาร ตัดสินใจเนื้อหาเอง หรืออ่าน/แก้ issue และ PR ต่อในบทสนทนา → MCP · ทั้งสองทาง: `search`/`list` หา issue ซ้ำก่อนสร้าง และร่าง body เป็นไฟล์ก่อน (`issue-bodies/`)
 
 ## รอบ 2 (Teams) — 2026-09-25
 
