@@ -27,6 +27,7 @@ Updated by: Claude `frontend` (Lab 07 review)
   - เทสต์ใหม่ `tests/api-safeguards.test.ts` (9 tests · รันใน CI) · smoke จริงผ่าน curl (201/400/200 ตรงสัญญา)
 - Lab 05b swarm: รอบ 1 OpenCode 7/20 (API) · รอบ 2 Claude 15/20 (ฟอร์มจริงในเบราว์เซอร์ทุกเคสผ่าน) — `docs/SWARM.md`
 - Lab 06 QA: E2E ผ่าน Playwright MCP 16/16 step (5 หน้า · ฟอร์ม contact/guestbook demo · 360px ไม่มี scroll แนวนอน · skip link) · a11y debate + action items P0/P1/P2 ใน `docs/QA.md`
+- Lab 07 cross-model review PR #11: OpenCode approve (ไม่มี Must) · Claude แก้ Should 3 + Nit 4 · `npm run test:e2e` รันจาก repo ได้ (server ของตัวเอง + temp `DATA_DIR`) · รอบ 2 ข้าม (human) · PR comment + merged `7787a96`
 - Issues: #5, #6 ปิดโดย PR #10 (state: completed) · #9 ปิดเป็น superseded (not_planned · rate limit ไปตัดสินที่ L13)
 
 ## In progress
