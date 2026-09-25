@@ -3,7 +3,7 @@
 > คัดลอกเป็น `docs/OPEN_LOOPS.md` ใน Lab 00 · งานค้างที่ยังไม่ปิด · ลบแถวเมื่อเสร็จ  
 > Owner = `Claude` | `OpenCode` | `human`
 
-Last updated: 2026-09-25 15:45 +07:00
+Last updated: 2026-09-25 15:50 +07:00
 
 | ID | Task | Owner | Priority | Trigger / due | Notes |
 |---|---|---|---|---|---|
@@ -11,7 +11,7 @@ Last updated: 2026-09-25 15:45 +07:00
 | L5 | ย้าย `## Brainstorm` ออกจาก PROFILE.md (ไฟล์ถูก copy ลง runtime image) | Claude | P2 | ก่อนทำ `llms.txt` | reviewer Should · ไม่ render อยู่แล้ว |
 | L9 | ตั้ง `SITE_URL` จริง (JSON-LD `url` ตอนนี้ = localhost) | human | P1 | Lab 08 | D8 |
 | L14 | POST ที่พังฝั่ง server ตอบ 400 → ผู้ใช้เห็น "เช็คความยาว" แทน "ระบบขัดข้อง" · แยก validation (400) กับ server fault (500) | OpenCode | P2 | ก่อน Lab 08 | reviewer Should ใน SWARM รอบ 2 · `api/guestbook.ts:44`, `api/contact.ts:33` · FE มีข้อความ 500 รองรับแล้ว |
-| L15 | a11y P0-1 smoke spec ไทย · P1-1 `aria-invalid` · P1-2 บอกช่องบังคับ | Claude | P1 | ก่อน Lab 08 | `docs/QA.md` a11y Action items · diff เสนอแล้ว รอยืนยัน |
+| L15 | a11y P1-2 บอกช่องบังคับ + P2 ที่เหลือ (P0-1/P1-1 แก้แล้ว) | Claude | P1 | ก่อน Lab 08 | `docs/QA.md` a11y Action items |
 | L6 | smoke test ผูกกับเนื้อหาจริงของ PROFILE → ใช้ fixture | Claude | P2 | ว่างเมื่อไหร่ | reviewer Should |
 | L13 | ตัดสิน #9 rate limit (ยังไม่มี D-id) — จะทำเป็น endpoint-level หรือข้าม v1 · **#9 ปิดแล้ว (not_planned)** — ตัดสินใน Lab 06 review แล้วเปิด issue ใหม่ | ร่วม | P2 | Lab 06 review | ขอบเขตเดิมเสนอไว้ใน `DEBATE.md` Devil R2 |
 

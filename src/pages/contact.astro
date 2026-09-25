@@ -56,6 +56,11 @@ const { primary } = splitName(loadProfile().name);
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    // Mark bad fields for screen readers; empty aria-invalid means false, so set "true" explicitly.
+    form.querySelectorAll<HTMLInputElement>('input:not([name=website]), textarea').forEach((f) => {
+      if (f.validity.valid) f.removeAttribute('aria-invalid');
+      else f.setAttribute('aria-invalid', 'true');
+    });
     if (!form.checkValidity()) {
       setStatus(MSG.invalid, 'error');
       form.reportValidity();

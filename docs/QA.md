@@ -27,7 +27,8 @@
 | 12 | 360px — ทั้ง 5 หน้า | **Pass** — `scrollWidth` = `clientWidth` (345/345) ไม่มี scroll แนวนอน (L12) |
 | 13 | Keyboard — Tab ครั้งแรก | **Pass** — โฟกัส skip link "ข้ามไปที่เนื้อหา" |
 | 14 | Console | **Pass** — มีแค่ 404 ของ step 8 (คาดไว้) |
-| 15 | `playwright/smoke.spec.ts` (repo) | **Fail (คาดการณ์ · ไม่ได้รัน)** — หา label `Name`/`Email`/`Message` แต่หน้าเป็นไทย → ดู action item P0-1 |
+| 15 | `playwright/smoke.spec.ts` (repo) | **Pass (หลังแก้ P0-1)** — 4/4 · label ไทย + `main h1` (เลี่ยง h1 ของ dev toolbar) + เคสอีเมลผิด/ส่ง demo · รันด้วย `channel: 'msedge'` ผ่าน config ชั่วคราวนอก repo |
+| 16 | Guestbook — กดส่งว่าง แล้วกรอกชื่อ ส่งซ้ำ (P1-1) | **Pass** — ว่าง: `name`/`message` = `aria-invalid="true"` · กรอกชื่อแล้ว: `name` ถูกล้าง เหลือ `message` · honeypot ไม่ถูกแตะ |
 
 Screenshots (`docs/screenshots/`):
 
@@ -59,14 +60,14 @@ Screenshots (`docs/screenshots/`):
 
 | ID | Priority | Item | เวลา | Owner |
 |---|---|---|---|---|
-| P0-1 | P0 | แก้ `playwright/smoke.spec.ts` ใช้ label ไทย (`ชื่อของคุณ` / `อีเมล` / `ข้อความ`) + เพิ่มเคสส่งฟอร์ม demo | 10 นาที | Claude |
-| P1-1 | P1 | Contact + Guestbook: submit ไม่ผ่าน → ตั้ง `aria-invalid="true"` ช่องที่ `!validity.valid` · ล้างเมื่อแก้ | 15 นาที | Claude `frontend` |
+| P0-1 ✅ | P0 | แก้ `playwright/smoke.spec.ts` ใช้ label ไทย (`ชื่อของคุณ` / `อีเมล` / `ข้อความ`) + เพิ่มเคสส่งฟอร์ม demo | 10 นาที | Claude |
+| P1-1 ✅ | P1 | Contact + Guestbook: submit ไม่ผ่าน → ตั้ง `aria-invalid="true"` ช่องที่ `!validity.valid` · ล้างเมื่อแก้ | 15 นาที | Claude `frontend` |
 | P1-2 | P1 | บอก "ทุกช่องจำเป็นต้องกรอก" ครั้งเดียวเหนือฟอร์ม Contact | 5 นาที | Claude `frontend` |
 | P2-1 | P2 | ย้าย `#contact-status` ไว้เหนือปุ่มส่ง (หรือถัดจากปุ่มทันที ก่อน hint) | 5 นาที | Claude `frontend` |
 | P2-2 | P2 | รัน axe (`@axe-core/playwright`) + NVDA ทั้ง 5 หน้า หลัง deploy | 30 นาที | Claude/Playwright |
 | P2-3 | P2 | ข้อความ error แยกทีละช่อง (ชื่อ/อีเมล/ข้อความ) | 20 นาที | Claude `frontend` |
 
-### Diff ที่เสนอ (รอยืนยันก่อนแก้)
+### Diff ที่เสนอ (ผู้ใช้ยืนยันแล้ว · แก้ P0-1 + P1-1 ครบ)
 
 P0-1 — `playwright/smoke.spec.ts`:
 

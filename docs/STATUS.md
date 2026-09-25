@@ -3,12 +3,12 @@
 > คัดลอกเป็น `docs/STATUS.md` ใน Lab 00 · อ่านทุก session · **สั้น** · single-writer ต่อรอบ  
 > ดู [`COURSE.md`](../COURSE.md) ชั้น State (Hot)
 
-Last updated: 2026-09-25 15:45 +07:00  
+Last updated: 2026-09-25 15:50 +07:00  
 Updated by: Claude `frontend` (Lab 06 QA)
 
 ## Current goal
 
-- Lab 06 QA หลักฐานครบ (`docs/QA.md` + 4 screenshots) — รอผู้ใช้ยืนยัน diff P0-1/P1-1 แล้วไป Lab 07 Review
+- Lab 06 QA เสร็จ (`docs/QA.md` + 4 screenshots + P0-1/P1-1 แก้แล้ว) — ถัดไป Lab 07 Review
 
 ## Done
 
@@ -30,7 +30,7 @@ Updated by: Claude `frontend` (Lab 06 QA)
 
 ## In progress
 
-- รอยืนยัน diff ที่เสนอใน `docs/QA.md`: P0-1 `playwright/smoke.spec.ts` label ไทย · P1-1 `aria-invalid` ใน contact.astro
+- —
 
 ## Blocked
 
@@ -38,12 +38,13 @@ Updated by: Claude `frontend` (Lab 06 QA)
 
 ## Next actions
 
-1. ยืนยัน + แก้ P0-1 / P1-1 (Claude) → `npm test` + `npm run test:e2e` (`channel: 'msedge'` หรือ `npx playwright install`)
-2. Lab 07 review — ตัดสิน L13 (#9 rate limit)
+1. Lab 07 review (PR `lab-06-qa` → main) — ตัดสิน L13 (#9 rate limit)
+2. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
+3. `npm run test:e2e` ต้องมี browser: `npx playwright install` หรือเพิ่ม `channel: 'msedge'` (ยังไม่แก้ `playwright.config.ts`)
 
 ## Files changed in latest session
 
-- `docs/QA.md` (ใหม่) · `docs/screenshots/01–04*.png` · ไฟล์นี้ + OPEN_LOOPS — ไม่แก้ `src/`
+- `docs/QA.md` · `docs/screenshots/01–04*.png` · `playwright/smoke.spec.ts` (P0-1) · `src/pages/contact.astro` + `guestbook.astro` (`aria-invalid` · P1-1) · ไฟล์นี้ + OPEN_LOOPS
 
 ## Notes
 
