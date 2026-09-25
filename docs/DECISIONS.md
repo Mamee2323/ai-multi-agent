@@ -55,6 +55,7 @@
 | [#5](https://github.com/Mamee2323/ai-multi-agent/issues/5) | [D6] BE: Guestbook limits + LIMIT + honeypot + วิธีลบ | D6 | OpenCode `backend` · 05 | gh |
 | [#6](https://github.com/Mamee2323/ai-multi-agent/issues/6) | [D5] BE: Contact length limit + ไม่ echo email | D5 | OpenCode `backend` · 05 | gh |
 | [#8](https://github.com/Mamee2323/ai-multi-agent/issues/8) | [D8] JSON-LD Person + meta description | D8 | Claude `frontend` · 04 | **GitHub MCP** (headless `claude -p`) |
+| [#9](https://github.com/Mamee2323/ai-multi-agent/issues/9) | [D5][D6] Guestbook v1 + rate limit · Contact บันทึก SQLite (ซ้อน #5/#6 · rate limit ยังไม่มี decision) | D5, D6 | OpenCode `backend` · 05 | **GitHub MCP** (interactive) |
 
 D7 (Now) เลื่อนเป็น Should → ไม่เปิด issue ใน v1
 
