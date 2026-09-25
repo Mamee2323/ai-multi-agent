@@ -106,3 +106,8 @@ D7 (Now) เลื่อนเป็น Should → ไม่เปิด issue �
 | ID | หัวข้อ | ตัดสินใจ | เหตุผลสั้น | ใครเสนอ |
 |----|--------|----------|------------|---------|
 | D15 | Rate limit | **ไม่ทำใน v1** · กันด้วย length limit (D5/D6) + honeypot + `LIMIT 50` + script ลบ (D10) · **trigger กลับมาทำ:** ก่อนโปรโมตเว็บสาธารณะ หรือเจอสแปมจริง · เมื่อทำ: in-memory sliding window ต่อ IP ใน `src/pages/api/*` (BE) + ข้อความ 429 ของตัวเองใน FE (ตอนนี้ 429 จะตกไปข้อความ "เช็คข้อมูล" ซึ่งผิดความหมาย) + ตัดสินเรื่อง trust `X-Forwarded-For` หลัง proxy | สแปมที่หลุดมา "รก" ไม่ใช่ "พัง" · กลุ่มเป้าหมายเล็ก (D14) + guestbook `noindex` (D13) · ทำให้ถูกต้องแก้ทั้ง BE และ FE พร้อมกัน | OpenCode (reviewer) + Claude |
+
+### D10 — เจ้าของยืนยัน L4 (2026-09-25)
+
+- จังหวะอ่านข้อความ Contact: **สัปดาห์ละครั้ง** (`node scripts/contact-manage.mjs list`)
+- Retention: **90 วัน** (`node scripts/contact-manage.mjs purge --days 90`) — ใช้ค่าเริ่มต้นตาม D10 · เงื่อนไข "ห้าม ship ถ้ายังไม่มีวิธีอ่าน" ผ่านแล้ว
