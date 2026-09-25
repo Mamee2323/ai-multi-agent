@@ -4,7 +4,7 @@
 > ดู [`COURSE.md`](../COURSE.md) ชั้น State (Hot)
 
 Last updated: 2026-09-25 15:30 +07:00  
-Updated by: Claude `frontend` (Lab 05b swarm รอบ 2)
+Updated by: Claude `frontend` (เริ่ม Lab 06)
 
 ## Current goal
 
@@ -29,7 +29,8 @@ Updated by: Claude `frontend` (Lab 05b swarm รอบ 2)
 
 ## In progress
 
-- — (รอเริ่ม Lab 06)
+- Lab 06 QA (Claude) บน branch `lab-06-qa` — ยังไม่เริ่ม E2E: Playwright MCP หลุดในเซสชันก่อนและ reconnect ไม่ติด → เริ่มเซสชันใหม่ (`claude` ไม่ใช่ `--continue`) · `docs/screenshots/` ยังว่าง
+- พบระหว่างอ่าน: `playwright/smoke.spec.ts` หา label อังกฤษ `Name`/`Email`/`Message` แต่หน้าเว็บเป็นไทย → `npm run test:e2e` จะ fail · จดเป็น action item ใน QA.md
 
 ## Blocked
 
