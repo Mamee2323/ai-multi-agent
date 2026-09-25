@@ -24,7 +24,7 @@ Last updated: 2026-09-25 16:30 +07:00
 | L2 | Guestbook BE: limit/LIMIT/honeypot/script ลบ (D6) | 2026-09-25 · `lab-05-backend` |
 | L3 | Contact: length limit + ไม่ echo email (D5) | 2026-09-25 · `lab-05-backend` |
 | L4 | จังหวะอ่าน Contact สัปดาห์ละครั้ง + retention 90 วัน (ค่าเริ่มต้น D10) | 2026-09-25 · human ยืนยัน · DECISIONS |
-| L13 | ตัดสิน rate limit → D15 ข้าม v1 · ติดตามที่ issue #12 (P2 · trigger: ก่อนโปรโมต/เจอสแปม) | 2026-09-25 · Lab 07 |
+| L13 | ตัดสิน rate limit → D15 ข้าม v1 · issue #12 ปิด not_planned (reopen เมื่อ trigger: ก่อนโปรโมต/เจอสแปม) | 2026-09-25 · Lab 07 |
 | L12 | QA มือถือ 360px ไม่มี scroll แนวนอน | 2026-09-25 · Lab 06 `docs/QA.md` step 12 |
 | L10 | script อ่าน/ลบ Contact + retention 90 วัน (D10) | 2026-09-25 · `lab-05-backend` |
 | — | UI Lab 04 (#1–#4 + D8 ฝั่ง FE) | 2026-09-25 · รอ merge PR |

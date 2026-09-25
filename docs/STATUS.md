@@ -13,7 +13,7 @@ Updated by: Claude `frontend` (Lab 07 review)
 ## Done
 
 - Lab 00 init · Lab 01 PROFILE (parser อ่าน section หลายบรรทัดได้แล้ว — `ca5204e`)
-- D15 rate limit ข้าม v1 (อนุมัติ 2026-09-25) → issue #12 P2
+- D15 rate limit ข้าม v1 (อนุมัติ 2026-09-25) → issue #12 (ปิด not_planned · reopen เมื่อถึง trigger)
 - Lab 02: `DEBATE.md` ครบ 3 มุม + D10–D14 · `DECISIONS.md` D1–D9
 - Lab 03: issues #1–#6 + #8 · `## Lab 03 — MCP vs gh` ใน DECISIONS
 - Lab 04: UI 5 หน้า + D12–D14 — **PR #7 merged** (`ebc9573`)
@@ -41,7 +41,7 @@ Updated by: Claude `frontend` (Lab 07 review)
 ## Next actions
 
 1. Lab 08 Ship (หลัง L9)
-2. human: L9 ก่อน Lab 08 (D15 อนุมัติแล้ว → issue #12)
+2. human: L9 ก่อน Lab 08
 3. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
 
 ## Files changed in latest session
