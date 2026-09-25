@@ -10,11 +10,11 @@ const interests = toInterests(profile.interests);
 ---
 <BaseLayout
   title={`สิ่งที่สนใจ · ${primary}`}
-  description={`หัวข้อที่ ${primary} กำลังหัดและตั้งใจจะเล่า: ${profile.interests.join(', ')}`}
+  description={interests.length ? `หัวข้อที่ ${primary} กำลังหัดและตั้งใจจะเล่า: ${profile.interests.join(', ')}` : `หัวข้อที่ ${primary} กำลังหัดและตั้งใจจะเล่า`}
 >
   <header class="card">
     <h1>สิ่งที่ฉันสนใจ</h1>
-    <p>นี่คือหัวข้อที่ฉันกำลังลองเรียนรู้อยู่ค่ะ ลองแล้วได้อะไรมา จะค่อย ๆ มาเล่าไว้ตรงนี้นะคะ</p>
+    {interests.length > 0 && <p>นี่คือหัวข้อที่ฉันกำลังลองเรียนรู้อยู่ค่ะ ลองแล้วได้อะไรมา จะค่อย ๆ มาเล่าไว้ตรงนี้นะคะ</p>}
   </header>
   {interests.map((item) => (
     <section class="card interest-section" aria-labelledby={item.slug}>

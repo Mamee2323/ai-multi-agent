@@ -160,6 +160,14 @@ input:focus, textarea:focus { border-color: var(--focus); }
 .entry-message { margin: 0.25rem 0; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
 .entry-time { font-size: 0.85rem; color: var(--muted); }
 
+/* Narrow phones (D14 · 360px): tighter padding; nav wraps, no horizontal scroll */
+@media (max-width: 480px) {
+  main { padding: 1.5rem 0 3rem; }
+  .card { padding: 1.15rem 1.2rem; }
+  .hero { padding: 1.5rem 1.25rem; }
+  .site-header nav a { padding: 0.3rem 0.65rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .interest-card { transition: none; }
   .interest-card:hover { transform: none; }

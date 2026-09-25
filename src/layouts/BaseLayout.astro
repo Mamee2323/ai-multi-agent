@@ -20,9 +20,9 @@ const person: Record<string, unknown> = {
   '@type': 'Person',
   name: primary,
   ...(alternate ? { alternateName: alternate } : {}),
-  description: profile.headline,
+  ...(profile.headline ? { description: profile.headline } : {}),
   url: Astro.site ? new URL('/', Astro.site).href : undefined,
-  knowsAbout: profile.interests,
+  ...(profile.interests.length ? { knowsAbout: profile.interests } : {}),
 };
 const jsonLd = JSON.stringify(person).replace(/</g, '\\u003c');
 

@@ -9,25 +9,27 @@ const { primary, alternate } = splitName(profile.name);
 const firstParagraph = bioParagraphs(profile.bio)[0] ?? '';
 const interests = toInterests(profile.interests);
 ---
-<BaseLayout title={`หน้าแรก · ${primary}`} description={`${primary} — ${profile.headline}`}>
+<BaseLayout title={`หน้าแรก · ${primary}`} description={profile.headline ? `${primary} — ${profile.headline}` : `เว็บส่วนตัวของ ${primary}`}>
   <section class="card hero" aria-labelledby="hero-title">
     <h1 id="hero-title">
       {primary}{alternate && <span class="alt-name" lang="en">{alternate}</span>}
     </h1>
-    <p class="lead">{profile.headline}</p>
+    {profile.headline && <p class="lead">{profile.headline}</p>}
     {firstParagraph && <p>{firstParagraph}</p>}
     <p><a href="/about">อ่านเรื่องของฉันต่อได้ที่หน้าเกี่ยวกับฉันค่ะ</a></p>
   </section>
 
-  <section class="card" aria-labelledby="interests-title">
-    <h2 id="interests-title">สิ่งที่ฉันกำลังสนใจ</h2>
-    <p>หัวข้อที่ฉันกำลังหัดอยู่ และตั้งใจจะค่อย ๆ มาเล่าให้ฟังค่ะ</p>
-    <ul class="interest-grid">
-      {interests.map((item) => (
-        <li><a class="interest-card" href={`/interests#${item.slug}`}>{item.label}</a></li>
-      ))}
-    </ul>
-  </section>
+  {interests.length > 0 && (
+    <section class="card" aria-labelledby="interests-title">
+      <h2 id="interests-title">สิ่งที่ฉันกำลังสนใจ</h2>
+      <p>หัวข้อที่ฉันกำลังหัดอยู่ และตั้งใจจะค่อย ๆ มาเล่าให้ฟังค่ะ</p>
+      <ul class="interest-grid">
+        {interests.map((item) => (
+          <li><a class="interest-card" href={`/interests#${item.slug}`}>{item.label}</a></li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   <section class="card" aria-labelledby="cta-title">
     <h2 id="cta-title">แวะทักทายกันได้นะคะ</h2>
