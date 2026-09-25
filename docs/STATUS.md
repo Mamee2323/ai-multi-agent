@@ -18,7 +18,7 @@ Updated by: Claude
 
 ## In progress
 
-- —
+- Handoff → OpenCode `backend`: L2–L3 (`docs/handoffs/05-claude-to-opencode.md`) · writer STATUS/OPEN_LOOPS รอบถัดไป = OpenCode
 
 ## Blocked
 
@@ -32,7 +32,7 @@ Updated by: Claude
 
 ## Files changed in latest session
 
-- `docs/DEBATE.md` (ใหม่) · `docs/DECISIONS.md` (ใหม่) · `docs/PROFILE.md` · `docs/STATUS.md` · `docs/OPEN_LOOPS.md`
+- `docs/DEBATE.md` (ใหม่) · `docs/DECISIONS.md` (ใหม่) · `docs/PROFILE.md` · `docs/STATUS.md` · `docs/OPEN_LOOPS.md` · `docs/handoffs/05-claude-to-opencode.md` (ใหม่)
 
 ## Notes
 
