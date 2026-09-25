@@ -11,6 +11,7 @@ Last updated: 2026-09-25 15:12 +07:00
 | L5 | ย้าย `## Brainstorm` ออกจาก PROFILE.md (ไฟล์ถูก copy ลง runtime image) | Claude | P2 | ก่อนทำ `llms.txt` | reviewer Should · ไม่ render อยู่แล้ว |
 | L9 | ตั้ง `SITE_URL` จริง (JSON-LD `url` ตอนนี้ = localhost) | human | P1 | Lab 08 | D8 |
 | L12 | QA มือถือ 360px ไม่มี scroll แนวนอน | Claude/Playwright | P1 | Lab 06 | D14 · ตรวจเบื้องต้นแล้วใน Lab 04 (5 หน้าผ่าน) — Lab 06 เขียน E2E ใน `playwright/` |
+| L14 | POST ที่พังฝั่ง server ตอบ 400 → ผู้ใช้เห็น "เช็คความยาว" แทน "ระบบขัดข้อง" · แยก validation (400) กับ server fault (500) | OpenCode | P2 | ก่อน Lab 08 | reviewer Should ใน SWARM รอบ 2 · `api/guestbook.ts:44`, `api/contact.ts:33` · FE มีข้อความ 500 รองรับแล้ว |
 | L6 | smoke test ผูกกับเนื้อหาจริงของ PROFILE → ใช้ fixture | Claude | P2 | ว่างเมื่อไหร่ | reviewer Should |
 | L13 | ตัดสิน #9 rate limit (ยังไม่มี D-id) — จะทำเป็น endpoint-level หรือข้าม v1 · **#9 ปิดแล้ว (not_planned)** — ตัดสินใน Lab 06 review แล้วเปิด issue ใหม่ | ร่วม | P2 | Lab 06 review | ขอบเขตเดิมเสนอไว้ใน `DEBATE.md` Devil R2 |
 

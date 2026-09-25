@@ -3,8 +3,8 @@
 > คัดลอกเป็น `docs/STATUS.md` ใน Lab 00 · อ่านทุก session · **สั้น** · single-writer ต่อรอบ  
 > ดู [`COURSE.md`](../COURSE.md) ชั้น State (Hot)
 
-Last updated: 2026-09-25 15:12 +07:00  
-Updated by: OpenCode `backend` (merge + close issues)
+Last updated: 2026-09-25 15:30 +07:00  
+Updated by: Claude `frontend` (Lab 05b swarm รอบ 2)
 
 ## Current goal
 
@@ -24,6 +24,7 @@ Updated by: OpenCode `backend` (merge + close issues)
   - M5 error body เป็น generic (`bad request` / `server error`) + log ฝั่ง server
   - M6 `scripts/guestbook-delete.mjs <id>` + `scripts/contact-manage.mjs list|delete|purge [--days 90]` (D10)
   - เทสต์ใหม่ `tests/api-safeguards.test.ts` (9 tests · รันใน CI) · smoke จริงผ่าน curl (201/400/200 ตรงสัญญา)
+- Lab 05b swarm: รอบ 1 OpenCode 7/20 (API) · รอบ 2 Claude 15/20 (ฟอร์มจริงในเบราว์เซอร์ทุกเคสผ่าน) — `docs/SWARM.md`
 - Issues: #5, #6 ปิดโดย PR #10 (state: completed) · #9 ปิดเป็น superseded (not_planned · rate limit ไปตัดสินที่ L13)
 
 ## In progress
@@ -36,12 +37,12 @@ Updated by: OpenCode `backend` (merge + close issues)
 
 ## Next actions
 
-1. Lab 06 QA (Claude/Playwright): E2E ใน `playwright/` + ตัดสิน #9→L13 (rate limit ยังไม่มี D-id) ที่ review
+1. Lab 06 QA (Claude/Playwright): E2E ใน `playwright/` (ต่อยอดเคสจาก `SWARM.md` รอบ 2 · browser: `npx playwright install` หรือ `channel: 'msedge'`) + ตัดสิน #9→L13 (rate limit ยังไม่มี D-id) ที่ review
 2. ตรวจ a11y + มือถือ 360px ทั้ง 5 หน้า (L12)
 
 ## Files changed in latest session
 
-- ไม่มีการแก้โค้ด — merge PR #7 + #10 ขึ้น main · ปิด #5, #6, #9 (comment บน #9) · อัปเดตไฟล์นี้ + OPEN_LOOPS
+- ไม่มีการแก้โค้ด — `docs/SWARM.md` (รอบ 2) · ไฟล์นี้ + OPEN_LOOPS
 
 ## Notes
 
