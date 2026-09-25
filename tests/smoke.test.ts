@@ -8,4 +8,11 @@ describe('smoke', () => {
     expect(p.headline).toBeTruthy();
     expect(Array.isArray(p.interests)).toBe(true);
   });
+
+  it('reads whole multi-line sections, not just the first line', () => {
+    const p = loadProfile();
+    expect(p.bio.split('\n').filter(Boolean).length).toBeGreaterThan(1);
+    expect(p.interests.length).toBeGreaterThan(1);
+    expect(p.bio).not.toContain('## ');
+  });
 });
