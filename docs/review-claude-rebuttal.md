@@ -53,6 +53,11 @@
 - `npm test` → 13/13 (รวม public-leak guard) · `npm run test:labs` → 2/2
 - ไม่แตะ `src/lib/db.ts` / `src/pages/api/*` (ownership OpenCode)
 
+## Round 2
+
+- **ข้าม** — เจ้าของเว็บตัดสิน 2026-09-25: `opencode run` รอบ 2 ค้างตั้งแต่เริ่ม (log ว่าง · ไม่ได้เขียนไฟล์ใด) และรอบ 1 ไม่มี Must · Should/Nit แก้ครบพร้อมเทสต์ · Lab 07 ระบุรอบ 2 เป็น "แนะนำ"
+- ผลที่ขาดไป: reviewer ยังไม่ได้ตรวจโค้ดหลังแก้ (`004d751`) ด้วยตัวเอง — ถ้าต้องการ ให้ OpenCode append `## Round 2 — close` ใน `docs/review-opencode.md` ภายหลังได้
+
 ## Canonical state updated
 
 - [x] docs/STATUS.md

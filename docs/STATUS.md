@@ -8,7 +8,7 @@ Updated by: Claude `frontend` (Lab 07 review)
 
 ## Current goal
 
-- Lab 07 cross-model review PR #11 — OpenCode approve (ไม่มี Must) · Claude แก้ Should 3 + Nit 4 แล้ว · เหลือ Round 2 close (OpenCode) → PR comment → merge
+- Lab 07 cross-model review PR #11 — OpenCode approve (ไม่มี Must) · Claude แก้ Should 3 + Nit 4 แล้ว · รอบ 2 ข้าม (human ตัดสิน · opencode ค้าง) · PR comment โพสต์แล้ว → รอ human ยืนยัน merge
 
 ## Done
 
@@ -31,7 +31,7 @@ Updated by: Claude `frontend` (Lab 07 review)
 
 ## In progress
 
-- Lab 07: `docs/review-opencode.md` (รอบ 1) · `docs/review-claude-rebuttal.md` · รอ OpenCode append `## Round 2 — close`
+- PR #11 รอ merge (human ยืนยัน)
 
 ## Blocked
 
@@ -39,7 +39,7 @@ Updated by: Claude `frontend` (Lab 07 review)
 
 ## Next actions
 
-1. OpenCode Round 2 close → โพสต์สรุปบน PR #11 → merge
+1. merge PR #11 → Lab 08 Ship
 2. human: L4 · L9 ก่อน Lab 08 (D15 อนุมัติแล้ว → issue #12)
 3. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
 
