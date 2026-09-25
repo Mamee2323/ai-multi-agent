@@ -3,12 +3,12 @@
 > คัดลอกเป็น `docs/STATUS.md` ใน Lab 00 · อ่านทุก session · **สั้น** · single-writer ต่อรอบ  
 > ดู [`COURSE.md`](../COURSE.md) ชั้น State (Hot)
 
-Last updated: 2026-09-25 16:05 +07:00  
+Last updated: 2026-09-25 16:20 +07:00  
 Updated by: Claude `frontend` (Lab 07 review)
 
 ## Current goal
 
-- Lab 07 cross-model review PR #11 — OpenCode approve (ไม่มี Must) · Claude แก้ Should 3 + Nit 4 แล้ว · รอบ 2 ข้าม (human ตัดสิน · opencode ค้าง) · PR comment โพสต์แล้ว → รอ human ยืนยัน merge
+- Lab 06 + Lab 07 **merge ขึ้น main แล้ว** (PR #11 · `7787a96`) — ถัดไป Lab 08 Ship
 
 ## Done
 
@@ -31,15 +31,15 @@ Updated by: Claude `frontend` (Lab 07 review)
 
 ## In progress
 
-- PR #11 รอ merge (human ยืนยัน)
+- —
 
 ## Blocked
 
-- —
+- Lab 08 Ship รอ human: L4 (จังหวะอ่าน Contact + retention · D10 ห้าม ship ถ้ายังไม่ตอบ) · L9 (`SITE_URL` จริง)
 
 ## Next actions
 
-1. merge PR #11 → Lab 08 Ship
+1. Lab 08 Ship (หลัง L4 + L9)
 2. human: L4 · L9 ก่อน Lab 08 (D15 อนุมัติแล้ว → issue #12)
 3. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
 
