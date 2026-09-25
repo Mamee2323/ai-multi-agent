@@ -8,17 +8,18 @@ Updated by: Claude
 
 ## Current goal
 
-- ปิด Lab 02 (Debate → Decisions) แล้วเตรียมเข้า Lab 03 Issues / Lab 04 FE ตามเกณฑ์ใน `DECISIONS.md`
+- Lab 03: issues จาก DECISIONS (เหลือ 1 ใบผ่าน GitHub MCP) → ต่อ Lab 04 FE
 
 ## Done
 
 - Lab 00 init · Lab 01 PROFILE (parser อ่าน section หลายบรรทัดได้แล้ว — `ca5204e`)
 - Lab 02: `DEBATE.md` ครบ 3 มุม (Brand Strategist · UX Critic · Devil's Advocate)
 - `DECISIONS.md` D1–D9 · PROFILE แก้ Headline + Tone ตาม D1/D2
+- Lab 03: issues #1–#6 (gh) · `## Lab 03 — MCP vs gh` ใน DECISIONS
 
 ## In progress
 
-- Handoff → OpenCode `backend`: L2–L3 (`docs/handoffs/05-claude-to-opencode.md`) · writer STATUS/OPEN_LOOPS รอบถัดไป = OpenCode
+- Handoff → OpenCode `backend` รอหยิบ (#5, #6 · `docs/handoffs/05-claude-to-opencode.md`) · writer STATUS/OPEN_LOOPS = Claude จนกว่า OpenCode จะเริ่มรอบนั้น
 
 ## Blocked
 
@@ -26,13 +27,13 @@ Updated by: Claude
 
 ## Next actions
 
-1. Lab 03: แตก D1–D9 เป็น issues (FE / BE แยก owner)
-2. Lab 04 (Claude `frontend`): ทำตาม "เกณฑ์พร้อม Frontend" ใน `DECISIONS.md`
-3. Lab 05 (OpenCode `backend`): เกณฑ์ BE ของ D5–D6 (length limit, LIMIT, honeypot, ลบข้อความ, ไม่ echo email)
+1. สร้าง issue D8 ผ่าน GitHub MCP (L7) แล้วเติม # ในตาราง Lab 03 ของ DECISIONS
+2. Lab 04 (Claude `frontend`): ปิด #1–#4 + D8
+3. Lab 05 (OpenCode `backend`): ปิด #5–#6
 
 ## Files changed in latest session
 
-- `docs/DEBATE.md` (ใหม่) · `docs/DECISIONS.md` (ใหม่) · `docs/PROFILE.md` · `docs/STATUS.md` · `docs/OPEN_LOOPS.md` · `docs/handoffs/05-claude-to-opencode.md` (ใหม่)
+- `docs/DEBATE.md` (ใหม่) · `docs/DECISIONS.md` (ใหม่) · `docs/PROFILE.md` · `docs/STATUS.md` · `docs/OPEN_LOOPS.md` · `docs/handoffs/05-claude-to-opencode.md` (ใหม่) · `issue-bodies/*.md` (ใหม่)
 
 ## Notes
 

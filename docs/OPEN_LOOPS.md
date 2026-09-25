@@ -7,8 +7,9 @@ Last updated: 2026-09-25 +07:00
 
 | ID | Task | Owner | Priority | Trigger / due | Notes |
 |---|---|---|---|---|---|
-| L2 | Guestbook เกณฑ์ BE: length limit ฝั่ง server · `LIMIT` แถว · honeypot · วิธีลบข้อความ | OpenCode | P0 | Lab 05 | D6 — ไม่ครบก่อน ship = ซ่อนลิงก์ Guestbook |
-| L3 | Contact: length limit + ไม่ echo email ใน response 201 | OpenCode | P1 | Lab 05 | D5 · ทำที่ `contact.ts` (lab test คาด `insertContact` คืน email) · ดู handoff `05-claude-to-opencode.md` |
+| L7 | สร้าง issue D8 ผ่าน GitHub MCP (หลักฐาน Lab 03) · body `issue-bodies/07-fe-seo-jsonld.md` | human | P0 | ก่อน Lab 04 | โหลด token จาก `.env` แล้วเปิด `claude` ใหม่ |
+| L2 | Guestbook เกณฑ์ BE: length limit ฝั่ง server · `LIMIT` แถว · honeypot · วิธีลบข้อความ | OpenCode | P0 | Lab 05 | #5 · D6 — ไม่ครบก่อน ship = ซ่อนลิงก์ Guestbook |
+| L3 | Contact: length limit + ไม่ echo email ใน response 201 | OpenCode | P1 | Lab 05 | #6 · D5 · ทำที่ `contact.ts` (lab test คาด `insertContact` คืน email) · ดู handoff `05-claude-to-opencode.md` |
 | L4 | เจ้าของจะอ่านข้อความ Contact ยังไง / ทุกกี่วัน · เก็บข้อมูลผู้เยี่ยมนานแค่ไหน | human | P1 | ก่อน Lab 08 Ship | Devil คำถามข้อ 1, 3 · ตอบแล้วบันทึกเป็น D-id |
 | L5 | ย้าย `## Brainstorm` ออกจาก PROFILE.md (ไฟล์ถูก copy ลง runtime image) | Claude | P2 | ก่อนทำ `llms.txt` | reviewer Should · ไม่ render อยู่แล้ว |
 | L6 | smoke test ผูกกับเนื้อหาจริงของ PROFILE → ใช้ fixture | Claude | P2 | ว่างเมื่อไหร่ | reviewer Should |

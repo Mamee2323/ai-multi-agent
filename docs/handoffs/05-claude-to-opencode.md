@@ -53,4 +53,4 @@ Status: NEEDS_REVIEW (ส่งต่อให้ implement)
 
 ## Single-writer note
 
-Writer รอบถัดไปของ STATUS/OPEN_LOOPS = OpenCode (จนกว่าจะมี handoff กลับ `05-opencode-to-claude.md`)
+Writer รอบถัดไปของ STATUS/OPEN_LOOPS = OpenCode **เมื่อเริ่มรอบ Lab 05** (ระหว่างนี้ Claude ยังถือ — Lab 03/04) · issues ที่ต้องปิด: #5, #6
