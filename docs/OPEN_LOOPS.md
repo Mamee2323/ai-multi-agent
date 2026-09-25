@@ -3,7 +3,7 @@
 > คัดลอกเป็น `docs/OPEN_LOOPS.md` ใน Lab 00 · งานค้างที่ยังไม่ปิด · ลบแถวเมื่อเสร็จ  
 > Owner = `Claude` | `OpenCode` | `human`
 
-Last updated: 2026-09-25 15:05 +07:00
+Last updated: 2026-09-25 15:12 +07:00
 
 | ID | Task | Owner | Priority | Trigger / due | Notes |
 |---|---|---|---|---|---|
@@ -12,7 +12,7 @@ Last updated: 2026-09-25 15:05 +07:00
 | L9 | ตั้ง `SITE_URL` จริง (JSON-LD `url` ตอนนี้ = localhost) | human | P1 | Lab 08 | D8 |
 | L12 | QA มือถือ 360px ไม่มี scroll แนวนอน | Claude/Playwright | P1 | Lab 06 | D14 · ตรวจเบื้องต้นแล้วใน Lab 04 (5 หน้าผ่าน) — Lab 06 เขียน E2E ใน `playwright/` |
 | L6 | smoke test ผูกกับเนื้อหาจริงของ PROFILE → ใช้ fixture | Claude | P2 | ว่างเมื่อไหร่ | reviewer Should |
-| L13 | ตัดสิน #9 rate limit (ยังไม่มี D-id) — จะทำเป็น endpoint-level หรือข้าม v1 | ร่วม | P2 | Lab 06 review | ขอบเขตเดิมเสนอไว้ใน `DEBATE.md` Devil R2 |
+| L13 | ตัดสิน #9 rate limit (ยังไม่มี D-id) — จะทำเป็น endpoint-level หรือข้าม v1 · **#9 ปิดแล้ว (not_planned)** — ตัดสินใน Lab 06 review แล้วเปิด issue ใหม่ | ร่วม | P2 | Lab 06 review | ขอบเขตเดิมเสนอไว้ใน `DEBATE.md` Devil R2 |
 
 ## ปิดแล้ว (ย่อ — ย้ายหรือลบได้เมื่อรก)
 
