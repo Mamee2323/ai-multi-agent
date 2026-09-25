@@ -54,7 +54,7 @@
 | [#4](https://github.com/Mamee2323/ai-multi-agent/issues/4) | [D5][D6] FE: Guestbook textContent + noindex · Contact ซ่อน placeholder | D5, D6 | Claude `frontend` · 04 | gh |
 | [#5](https://github.com/Mamee2323/ai-multi-agent/issues/5) | [D6] BE: Guestbook limits + LIMIT + honeypot + วิธีลบ | D6 | OpenCode `backend` · 05 | gh |
 | [#6](https://github.com/Mamee2323/ai-multi-agent/issues/6) | [D5] BE: Contact length limit + ไม่ echo email | D5 | OpenCode `backend` · 05 | gh |
-| (รอ) | [D8] JSON-LD Person + meta description | D8 | Claude `frontend` · 04 | **GitHub MCP** — body: `issue-bodies/07-fe-seo-jsonld.md` |
+| [#8](https://github.com/Mamee2323/ai-multi-agent/issues/8) | [D8] JSON-LD Person + meta description | D8 | Claude `frontend` · 04 | **GitHub MCP** (headless `claude -p`) |
 
 D7 (Now) เลื่อนเป็น Should → ไม่เปิด issue ใน v1
 
@@ -63,5 +63,5 @@ D7 (Now) เลื่อนเป็น Should → ไม่เปิด issue �
 - **ความเร็ว:** `gh issue create --body-file` สร้าง 6 ใบในคำสั่งเดียว ไม่ต้องรอ tool call ทีละรอบ · MCP ช้ากว่าเล็กน้อยแต่ agent ร่าง + สร้างจบในบทสนทนาเดียว
 - **สิทธิ์:** `gh` ใช้ keyring login ของเครื่อง (สิทธิ์เต็มบัญชี) · MCP ใช้ PAT ใน `.env` ผ่าน `.mcp.json` — ควรเป็น fine-grained PAT เฉพาะ repo นี้ + scope Issues
 - **Audit trail:** ทั้งคู่สร้าง issue ในชื่อบัญชีเดียวกัน · `gh` มีประวัติคำสั่งใน shell · MCP มีบันทึกใน transcript ของ Claude — แต่ไม่มีทางไหนบอกบน GitHub ว่า agent เป็นคนสร้าง (เขียนใน body เองถ้าต้องการ)
-- **ข้อผิดพลาดที่เจอ:** MCP ต่อไม่ติด (`Authorization header is badly formatted`) เพราะเปิด `claude` ก่อนโหลด `GITHUB_PERSONAL_ACCESS_TOKEN` → `${...}` ใน `.mcp.json` ว่าง ได้ `Bearer ` เปล่า · แก้: โหลด `.env` เข้า env แล้วเปิด `claude` ใหม่ · `gh` ใช้ได้ทันทีเพราะ login ไว้แล้ว
+- **ข้อผิดพลาดที่เจอ:** MCP ต่อไม่ติด (`Authorization header is badly formatted`) เพราะเปิด `claude` ก่อนโหลด `GITHUB_PERSONAL_ACCESS_TOKEN` → `${...}` ใน `.mcp.json` ว่าง ได้ `Bearer ` เปล่า · แก้: โหลด `.env` เข้า env ก่อนเปิด `claude` — ครั้งนี้ใช้ headless `claude -p --allowedTools mcp__github…` ใน shell ที่ export token แล้ว สร้าง #8 ได้โดยไม่ต้องปิดเซสชันหลัก · `gh` ใช้ได้ทันทีเพราะ login ไว้แล้ว
 - **เมื่อไหร่ใช้อะไร:** งาน batch / script / CI → `gh` · งานที่ agent ต้องอ่านเอกสารแล้วตัดสินใจเนื้อหา issue เอง หรือต้องอ่าน issue/PR ต่อในบทสนทนา → MCP · ร่าง body เป็นไฟล์ก่อน (`issue-bodies/`) ใช้ได้กับทั้งสองทาง
