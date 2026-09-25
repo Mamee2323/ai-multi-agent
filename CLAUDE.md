@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 @AGENTS.md
 
 # Claude Code — seed คอร์ส (อย่าลบตอน /init)
@@ -43,3 +47,15 @@
 ## Labs
 
 ดู [`labs/README.md`](labs/README.md) · เริ่ม [`lab-00-project-init`](labs/lab-00-project-init/README.md)
+
+---
+
+# โครงสร้างโค้ด (เติมจาก /init)
+
+คำสั่ง + จุดพลาดเชิงสถาปัตยกรรม (Astro SSR · PROFILE.md parse · SQLite singleton / `DATA_DIR` · สัญญา error API · public-leak guard) อยู่ใน `AGENTS.md` ส่วน **คำสั่ง** และ **จุดพลาดเชิงสถาปัตยกรรม** — import แล้วด้านบน อย่าคัดลอกซ้ำ
+
+เพิ่มเติมเฉพาะ Claude:
+
+```powershell
+npx vitest run --config vitest.labs.config.ts tests/labs/lab05-api.test.ts   # lab test ไฟล์เดียว (ต้องระบุ config — vitest.config.ts exclude tests/labs)
+```
