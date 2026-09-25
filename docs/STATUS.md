@@ -8,7 +8,7 @@ Updated by: Claude (Lab 04)
 
 ## Current goal
 
-- Lab 04 FE เสร็จ (PR รอรีวิว) → ส่งต่อ Lab 05 BE ให้ OpenCode
+- Lab 04 FE เสร็จ (PR #7 รอรีวิว) → ส่งต่อ Lab 05 BE ให้ OpenCode
 
 ## Done
 
@@ -30,7 +30,7 @@ Updated by: Claude (Lab 04)
 
 1. Lab 05 (OpenCode `backend`): ปิด #5, #6 ตาม handoff 04
 2. สร้าง issue D8 ผ่าน GitHub MCP (L7) — ยังค้างจาก Lab 03
-3. Review + merge PR Lab 04
+3. Review + merge PR #7 (Lab 04)
 
 ## Files changed in latest session
 

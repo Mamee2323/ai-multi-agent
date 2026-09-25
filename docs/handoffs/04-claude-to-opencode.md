@@ -11,7 +11,7 @@ Status: NEEDS_REVIEW (FE เสร็จ — ส่งต่อให้ BE impl
 
 - Lab 02: `docs/DEBATE.md` → `docs/DECISIONS.md` D1–D9 · `docs/PROFILE.md` แก้ `## Headline` + `## Tone` (ไม่เปลี่ยนชื่อ heading)
 - Lab 03: issues #1–#6 · ร่าง body ใน `issue-bodies/`
-- Lab 04 (branch `lab-04-frontend`, PR ดูใน STATUS): UI 5 หน้า ธีมสว่าง nav ไทย · Guestbook render ด้วย `textContent` · ฟอร์มทั้งสองส่ง honeypot `website` + เช็ค `res.ok` + ไม่แสดง error ของ server · JSON-LD `Person` เฉพาะ field ใน D8
+- Lab 04 (branch `lab-04-frontend`, PR #7): UI 5 หน้า ธีมสว่าง nav ไทย · Guestbook render ด้วย `textContent` · ฟอร์มทั้งสองส่ง honeypot `website` + เช็ค `res.ok` + ไม่แสดง error ของ server · JSON-LD `Person` เฉพาะ field ใน D8
 - **ฝั่ง Claude ไม่ได้แตะ** `src/lib/*`, `src/pages/api/*`, `tests/`
 
 ## Files
