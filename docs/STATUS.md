@@ -3,12 +3,12 @@
 > คัดลอกเป็น `docs/STATUS.md` ใน Lab 00 · อ่านทุก session · **สั้น** · single-writer ต่อรอบ  
 > ดู [`COURSE.md`](../COURSE.md) ชั้น State (Hot)
 
-Last updated: 2026-09-25 15:50 +07:00  
-Updated by: Claude `frontend` (Lab 06 QA)
+Last updated: 2026-09-25 16:05 +07:00  
+Updated by: Claude `frontend` (Lab 07 review)
 
 ## Current goal
 
-- Lab 06 QA เสร็จ (`docs/QA.md` + 4 screenshots + P0-1/P1-1 แก้แล้ว) — ถัดไป Lab 07 Review
+- Lab 07 cross-model review PR #11 — OpenCode approve (ไม่มี Must) · Claude แก้ Should 3 + Nit 4 แล้ว · เหลือ Round 2 close (OpenCode) → PR comment → merge
 
 ## Done
 
@@ -25,12 +25,12 @@ Updated by: Claude `frontend` (Lab 06 QA)
   - M6 `scripts/guestbook-delete.mjs <id>` + `scripts/contact-manage.mjs list|delete|purge [--days 90]` (D10)
   - เทสต์ใหม่ `tests/api-safeguards.test.ts` (9 tests · รันใน CI) · smoke จริงผ่าน curl (201/400/200 ตรงสัญญา)
 - Lab 05b swarm: รอบ 1 OpenCode 7/20 (API) · รอบ 2 Claude 15/20 (ฟอร์มจริงในเบราว์เซอร์ทุกเคสผ่าน) — `docs/SWARM.md`
-- Lab 06 QA: E2E ผ่าน Playwright MCP 14/14 step (5 หน้า · ฟอร์ม contact/guestbook demo · 360px ไม่มี scroll แนวนอน · skip link) · a11y debate + action items P0/P1/P2 ใน `docs/QA.md`
+- Lab 06 QA: E2E ผ่าน Playwright MCP 16/16 step (5 หน้า · ฟอร์ม contact/guestbook demo · 360px ไม่มี scroll แนวนอน · skip link) · a11y debate + action items P0/P1/P2 ใน `docs/QA.md`
 - Issues: #5, #6 ปิดโดย PR #10 (state: completed) · #9 ปิดเป็น superseded (not_planned · rate limit ไปตัดสินที่ L13)
 
 ## In progress
 
-- —
+- Lab 07: `docs/review-opencode.md` (รอบ 1) · `docs/review-claude-rebuttal.md` · รอ OpenCode append `## Round 2 — close`
 
 ## Blocked
 
@@ -38,13 +38,13 @@ Updated by: Claude `frontend` (Lab 06 QA)
 
 ## Next actions
 
-1. Lab 07 review (PR `lab-06-qa` → main) — ตัดสิน L13 (#9 rate limit)
-2. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
-3. `npm run test:e2e` ต้องมี browser: `npx playwright install` หรือเพิ่ม `channel: 'msedge'` (ยังไม่แก้ `playwright.config.ts`)
+1. OpenCode Round 2 close → โพสต์สรุปบน PR #11 → merge
+2. human: อนุมัติ D15 (L13) · L4 · L9 ก่อน Lab 08
+3. L15 ที่เหลือ: P1-2 บอกช่องบังคับ · P2 ใน `docs/QA.md`
 
 ## Files changed in latest session
 
-- `docs/QA.md` · `docs/screenshots/01–04*.png` · `playwright/smoke.spec.ts` (P0-1) · `src/pages/contact.astro` + `guestbook.astro` (`aria-invalid` · P1-1) · ไฟล์นี้ + OPEN_LOOPS
+- Lab 07: `playwright.config.ts` (webServer + temp `DATA_DIR` + `PW_CHANNEL`) · `playwright/smoke.spec.ts` · `src/pages/contact.astro` + `guestbook.astro` (`input` listener · `.hp`) · `docs/QA.md` · `docs/review-*.md` · ไฟล์นี้ + OPEN_LOOPS
 
 ## Notes
 

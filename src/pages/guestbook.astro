@@ -120,10 +120,18 @@ const { primary } = splitName(loadProfile().name);
     }
   }
 
+  // Clear a field's aria-invalid as soon as the visitor fixes it, not only on the next submit.
+  form?.addEventListener('input', (e) => {
+    const f = e.target as HTMLInputElement;
+    if (f.validity?.valid) f.removeAttribute('aria-invalid');
+  });
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     // Mark bad fields for screen readers; empty aria-invalid means false, so set "true" explicitly.
-    form.querySelectorAll<HTMLInputElement>('input:not([name=website]), textarea').forEach((f) => {
+    // Honeypot fields live inside .hp and are skipped whatever their name.
+    form.querySelectorAll<HTMLInputElement>('input, textarea').forEach((f) => {
+      if (f.closest('.hp')) return;
       if (f.validity.valid) f.removeAttribute('aria-invalid');
       else f.setAttribute('aria-invalid', 'true');
     });

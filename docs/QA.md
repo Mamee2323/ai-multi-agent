@@ -27,7 +27,7 @@
 | 12 | 360px — ทั้ง 5 หน้า | **Pass** — `scrollWidth` = `clientWidth` (345/345) ไม่มี scroll แนวนอน (L12) |
 | 13 | Keyboard — Tab ครั้งแรก | **Pass** — โฟกัส skip link "ข้ามไปที่เนื้อหา" |
 | 14 | Console | **Pass** — มีแค่ 404 ของ step 8 (คาดไว้) |
-| 15 | `playwright/smoke.spec.ts` (repo) | **Pass (หลังแก้ P0-1)** — 4/4 · label ไทย + `main h1` (เลี่ยง h1 ของ dev toolbar) + เคสอีเมลผิด/ส่ง demo · รันด้วย `channel: 'msedge'` ผ่าน config ชั่วคราวนอก repo |
+| 15 | `playwright/smoke.spec.ts` (repo) | **Pass (หลังแก้ P0-1)** — 4/4 · label ไทย + `main h1` + เคสอีเมลผิด/ส่ง demo · หลัง Lab 07: `npm run test:e2e` จาก repo ตรง ๆ (`PW_CHANNEL=msedge`) ผ่าน 4/4 |
 | 16 | Guestbook — กดส่งว่าง แล้วกรอกชื่อ ส่งซ้ำ (P1-1) | **Pass** — ว่าง: `name`/`message` = `aria-invalid="true"` · กรอกชื่อแล้ว: `name` ถูกล้าง เหลือ `message` · honeypot ไม่ถูกแตะ |
 
 Screenshots (`docs/screenshots/`):
@@ -61,37 +61,34 @@ Screenshots (`docs/screenshots/`):
 | ID | Priority | Item | เวลา | Owner |
 |---|---|---|---|---|
 | P0-1 ✅ | P0 | แก้ `playwright/smoke.spec.ts` ใช้ label ไทย (`ชื่อของคุณ` / `อีเมล` / `ข้อความ`) + เพิ่มเคสส่งฟอร์ม demo | 10 นาที | Claude |
-| P1-1 ✅ | P1 | Contact + Guestbook: submit ไม่ผ่าน → ตั้ง `aria-invalid="true"` ช่องที่ `!validity.valid` · ล้างเมื่อแก้ | 15 นาที | Claude `frontend` |
+| P1-1 ✅ | P1 | Contact + Guestbook: submit ไม่ผ่าน → ตั้ง `aria-invalid="true"` ช่องที่ `!validity.valid` · ล้างทันทีเมื่อช่องกลับมา valid (`input` listener) | 15 นาที | Claude `frontend` |
 | P1-2 | P1 | บอก "ทุกช่องจำเป็นต้องกรอก" ครั้งเดียวเหนือฟอร์ม Contact | 5 นาที | Claude `frontend` |
 | P2-1 | P2 | ย้าย `#contact-status` ไว้เหนือปุ่มส่ง (หรือถัดจากปุ่มทันที ก่อน hint) | 5 นาที | Claude `frontend` |
 | P2-2 | P2 | รัน axe (`@axe-core/playwright`) + NVDA ทั้ง 5 หน้า หลัง deploy | 30 นาที | Claude/Playwright |
 | P2-3 | P2 | ข้อความ error แยกทีละช่อง (ชื่อ/อีเมล/ข้อความ) | 20 นาที | Claude `frontend` |
 
-### Diff ที่เสนอ (ผู้ใช้ยืนยันแล้ว · แก้ P0-1 + P1-1 ครบ)
+### โค้ดที่ใช้จริง (ผู้ใช้ยืนยันแล้ว · sync ตาม Lab 07 review Nit 2)
 
-P0-1 — `playwright/smoke.spec.ts`:
+P0-1 — `playwright/smoke.spec.ts`: label ไทย `{ exact: true }` · `main h1` · เคสอีเมลผิด (ไม่ POST + `aria-invalid` ติด/ล้าง) · เคสส่ง demo (เฉพาะ localhost)
 
-```diff
--  await expect(page.getByLabel('Name')).toBeVisible();
--  await expect(page.getByLabel('Email')).toBeVisible();
--  await expect(page.getByLabel('Message')).toBeVisible();
-+  await expect(page.getByLabel('ชื่อของคุณ')).toBeVisible();
-+  await expect(page.getByLabel('อีเมล')).toBeVisible();
-+  await expect(page.getByLabel('ข้อความ')).toBeVisible();
+P1-1 — `src/pages/contact.astro` + `guestbook.astro` (script):
+
+```ts
+// ล้างทันทีที่ช่องกลับมา valid (Lab 07 Should 1)
+form?.addEventListener('input', (e) => {
+  const f = e.target as HTMLInputElement;
+  if (f.validity?.valid) f.removeAttribute('aria-invalid');
+});
+// ใน submit handler ก่อน checkValidity() — ข้าม honeypot ด้วย .hp (Lab 07 Nit 4)
+form.querySelectorAll<HTMLInputElement>('input, textarea').forEach((f) => {
+  if (f.closest('.hp')) return;
+  if (f.validity.valid) f.removeAttribute('aria-invalid');
+  else f.setAttribute('aria-invalid', 'true'); // ค่าว่าง = false ตาม ARIA
+});
 ```
 
-P1-1 — `src/pages/contact.astro` (script):
+## วิธีรัน E2E (หลัง Lab 07 review)
 
-```diff
-     if (!form.checkValidity()) {
-+      form.querySelectorAll('input:not([name=website]), textarea').forEach((el) => {
-+        const f = el as HTMLInputElement;
-+        if (f.validity.valid) f.removeAttribute('aria-invalid');
-+        else f.setAttribute('aria-invalid', 'true'); // ค่าว่าง = false ตาม ARIA
-+      });
-       setStatus(MSG.invalid, 'error');
-       form.reportValidity();
-       return;
-     }
-+    form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
-```
+- `npm run test:e2e` — build + start server ของตัวเองที่ `:4323` · `DATA_DIR` = temp ใหม่ทุกครั้ง → **ไม่เขียน `./data`**
+- ไม่มี Playwright browser: `npx playwright install chromium` · หรือใช้เบราว์เซอร์ในเครื่องต่อคำสั่ง: `$env:PW_CHANNEL='msedge'; npm run test:e2e` (หายเมื่อปิดหน้าต่าง)
+- `PLAYWRIGHT_BASE_URL` = ทดสอบ server ที่รันอยู่แล้ว (ไม่ start เอง) · เคสส่ง demo จะ skip ถ้าไม่ใช่ localhost — กันยิงข้อมูลเข้า production
