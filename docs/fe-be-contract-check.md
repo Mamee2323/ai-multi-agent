@@ -1,45 +1,60 @@
-# FE ↔ BE Contract Check — Guestbook / Contact
+# FE ↔ BE Contract Check
 
-> ตรวจตาม `docs/_call-opencode-prompt.md` · วันที่ 2026-09-25 · อ้างอิง D5/D6 ใน `docs/DECISIONS.md` + handoff `docs/handoffs/05-claude-to-opencode.md`
-> รายงานนี้ไม่ได้แก้โค้ดใด ๆ — เป็นการเทียบสัญญาระหว่างฟอร์ม FE (เสร็จแล้วใน Lab 04) กับ API ปัจจุบัน (รอ Lab 05 ข้อ #5/#6)
+> รายงานตรวจสัญญาระหว่างฟอร์ม (FE) กับ API stubs (BE) · ฐานอ้างอิง: `docs/DECISIONS.md` (มีอยู่แล้ว ใช้ D4–D6, D10) + โค้ดจริง
+> ขอบเขต: `src/pages/contact.astro`, `src/pages/guestbook.astro`, `src/pages/api/{contact,guestbook,interests}.ts`, `src/lib/db.ts` (อ่านอย่างเดียว — ไม่ได้แก้ไฟล์ใดใน `src/`)
 
-## 1. ตาราง endpoint
+## 1. Match — ตรงกันแล้ว
 
-| Endpoint | Method | Request fields ที่ FE ส่ง | Response ที่ FE คาด | สิ่งที่ API ทำจริงตอนนี้ | match/mismatch |
-|---|---|---|---|---|---|
-| `/api/contact` | POST (JSON) | `{ name, email, message, website }` (trim แล้วยกเว้น website) · maxlength ฝั่ง client: 80 / 120 / 2000 | `res.ok` (201) พอ — **ไม่อ่าน body ของ response เลย** · ใช้ข้อความคงที่ของตัวเองทุกสถานะ (ok / rejected 4xx / unavailable 5xx / network) · 400→"เช็คข้อมูล", ≥500→"ฟอร์มใช้ไม่ได้" | รับ JSON → `insertContact()` (validate: string/ไม่ว่าง + regex email · **ยังไม่มี length limit, ไม่มี honeypot**) → 201 + row เต็ม **รวม `email`** · error → 400 หรือ 501 (`NOT_IMPLEMENTED`) พร้อม `{ error: message }` ดิบ | **match** ด้าน method/shape/status handling · **mismatch**: (a) 201 echo `email` กลับ (ขัด D5 — แต่ FE ไม่อ่าน body จึงไม่พัง เป็นเรื่อง leak ล้วน ๆ) (b) ไม่มี server-side length limit (c) honeypot `website` ที่ FE ส่งมา **ถูกเมิน** — บอตที่กรอก website ยังถูกบันทึกจริง |
-| `/api/guestbook` | POST (JSON) | `{ name, message, website }` (trim แล้วยกเว้น website) · maxlength ฝั่ง client: 40 / 500 | เหมือน contact: `res.ok` (201) พอ ไม่อ่าน body · สำเร็จแล้ว `load()` ใหม่เพื่อดึง list ล่าสุด | รับ JSON → `insertGuestbook()` (validate: string/ไม่ว่าง · **ไม่มี length limit, ไม่มี honeypot**) → 201 + row · error → 400/501 | **match** ด้าน method/shape/status · **mismatch**: (a) ไม่มี server-side length limit (b) honeypot `website` ถูกเมิน |
-| `/api/guestbook` | GET | — (header `accept: application/json`) | 200 + JSON `{ entries: [...] }` · ใช้เฉพาะ `id?`, `name`, `message`, `created_at` ต่อ entry · render ด้วย `textContent` เท่านั้น (ไม่มี `innerHTML`) · ถ้า `!res.ok` → ข้อความโหลดไม่สำเร็จ | 200 + `{ entries: listGuestbook() }` · `SELECT * ... ORDER BY created_at DESC` **ไม่มี `LIMIT`** · error → 500/501 พร้อม `{ error }` ดิบ (FE ไม่แสดง) | **match** ด้าน shape · **mismatch**: ไม่มี `LIMIT` จำนวนแถว (D6) |
+### Contact (`contact.astro` ↔ `api/contact.ts` ↔ `insertContact`)
 
-สังเกต: FE ทั้งสองฟอร์มไม่เคยแสดง `error` text จาก server (ใช้ข้อความไทยคงที่ตาม D5) — แต่ตามกติกา public-site-safe ฝั่ง BE ก็ยังต้องไม่ leak SQL/stack ใน `{ error }` เอง
+- **Method/URL**: FE POST `/api/contact` (contact.astro:75–79) = BE `POST` handler (contact.ts:10)
+- **Content-Type**: FE ส่ง `application/json` + `JSON.stringify` = BE อ่านด้วย `request.json()` (contact.ts:12)
+- **Request body**: FE ส่ง `{name, email, message, website}` — BE ใช้ `name/email/message` ตรงกับ signature ของ `insertContact` (db.ts:60–64) · ทั้งสองฝั่ง trim ก่อน (FE contact.astro:66–68, BE `normalizeText` db.ts:26–35)
+- **Email validation**: FE ใช้ `type="email"` + `checkValidity()` · BE มี regex เช็คซ้ำ (db.ts:69–71) — สองชั้นสอดคล้องกัน
+- **Status codes**: สำเร็จ 201 → FE เช็ค `res.ok` แสดงข้อความสำเร็จ (contact.astro:80) · 400 → แสดง `rejected` · 501/5xx → แสดง `unavailable` (contact.astro:83–87) — ตรงกับสัญญา error ใน AGENTS.md (NOT_IMPLEMENTED→501, อื่น→400 สำหรับ POST)
+- **Error handling**: FE ไม่เคยอ่าน/แสดง error text จาก server — ใช้ข้อความไทยคงที่เท่านั้น (contact.astro:41–49) ตรงตาม D3/D5 (ห้าม render error ดิบ)
 
-## 2. Mismatch ที่ต้องแก้ vs ที่จะหายเอง
+### Guestbook (`guestbook.astro` ↔ `api/guestbook.ts` ↔ `listGuestbook/insertGuestbook`)
 
-**จะหายไปเองเมื่อทำ Lab 05 issue #5/#6 (ฝั่ง BE ทั้งหมด — ไม่มีอะไรที่ FE ต้องแก้):**
+- **GET**: FE fetch `/api/guestbook` (guestbook.astro:112) คาด `{entries: [...]}` = BE คืน `{ entries: rows }` 200 (guestbook.ts:9) ตรงสัญญา AGENTS.md
+- **Entry shape**: FE ใช้ `name`, `message`, `created_at` (guestbook.astro:45, 90–103) = คอลัมน์จริงจาก `SELECT *` (db.ts:91–97)
+- **รูปแบบเวลา**: FE `formatTime` รองรับรูปแบบ UTC `"YYYY-MM-DD HH:MM:SS"` ของ SQLite `datetime('now')` พอดี (guestbook.astro:74–75 เทียบ db.ts:54) — เขียน comment อ้างถึงกันไว้ชัดเจน
+- **POST body**: FE ส่ง `{name, message, website}` = BE ใช้ `name/message` ตรง signature `insertGuestbook` (db.ts:99–102)
+- **Status codes**: 201 → `res.ok` + reload list · 400 → `rejected` · 500/501 → `unavailable` (guestbook.astro:145–153) — ตรงสัญญา
+- **XSS-safe render**: FE render ข้อความผู้ใช้ด้วย `createElement` + `textContent` เท่านั้น ไม่มี `innerHTML` (guestbook.astro:84–107) ตรง D6
+- **GET error**: 500/501 → FE แสดง `loadFail` (guestbook.astro:118–120) — ครอบคลุม
 
-1. **Server-side length limit ไม่มี** (`db.ts` validate แค่ string/ไม่ว่าง) → แก้ใน `db.ts` ตาม #5/#6 โดยใช้ค่าเดียวกับ maxlength ของ FE (guestbook 40/500 · contact 80/120/2000) แล้วสัญญาจะตรงกันพอดี
-2. **Honeypot `website` ถูกเมิน** → แก้ใน `contact.ts`/`guestbook.ts`: ถ้ามีค่าให้ตอบ 201 โดยไม่บันทึก (ตาม handoff ข้อ 3) — FE ส่ง field นี้มาอยู่แล้ว ไม่ต้องแก้ FE
-3. **`listGuestbook` ไม่มี `LIMIT`** → แก้ใน `db.ts` (เสนอ ≤ 50 แถวล่าสุด) — FE รองรับ array ยาวเท่าไรก็ได้
-4. **201 ของ contact echo `email` กลับ** → แก้ใน `contact.ts` ตัด `email` ออกจาก JSON response (เก็บใน DB ตามปกติ) — FE ไม่อ่าน body ของ 201 เลย จึงไม่กระทบฟอร์ม
+### อื่น ๆ
 
-**Mismatch ที่ต้องแก้นอก #5/#6:** ไม่มี — สัญญา method, path, field names, status-code handling (`res.ok` / 4xx / ≥500) และ shape ของ GET ตรงกันหมดแล้ว งานที่เหลือคือเติมเกณฑ์ความปลอดภัยฝั่ง BE ล้วน ๆ
+- `/api/interests` (interests.ts) คืน `{interests, source: 'profile'}` — **ไม่มี FE หน้าใด fetch endpoint นี้** (grep ทั้ง `src/` แล้ว) เพราะหน้าเว็บใช้ `loadProfile()` ฝั่ง server ตาม D4 จึงไม่มีจุดขัดกัน ถือเป็น endpoint ว่างสำหรับอนาคต
 
-**ข้อควรระวัง (ไม่ใช่ mismatch แต่ต้องคงไว้):** สัญญา error เดิม (`NOT_IMPLEMENTED` → 501 · POST error → 400 · GET error → 500 · สำเร็จ → 201) และ `{ entries: [...] }` ของ guestbook GET — อย่าเปลี่ยนตอนเพิ่ม limit/honeypot
+## 2. Mismatch — จุดที่ไม่ตรงกัน
 
-## 3. ยืนยัน / เสนอเปลี่ยน ค่าที่ตกลงกัน
+| # | จุด | รายละเอียด | อ้างอิง |
+|---|-----|-----------|---------|
+| M1 | **Honeypot ไม่ถูกตรวจฝั่ง server** | FE ทั้งสองฟอร์มส่ง field `website` (contact.astro:69, guestbook.astro:134) แต่ BE ไม่เคยอ่าน `website` เลย — บอทที่กรอก honeypot จะถูกบันทึกปกติ | D6 กำหนด honeypot เป็นเงื่อนไข BE ของ Guestbook · `api/contact.ts:12–13`, `api/guestbook.ts:25–26`, `db.ts:60–67, 99–104` |
+| M2 | **ไม่มี length limit ฝั่ง server** | FE จำกัดด้วย `maxlength` (contact: 80/120/2000 · guestbook: 40/500) แต่ `normalizeText` เช็คแค่ string + ไม่ว่าง (db.ts:26–35) — ยิง API ตรง ๆ ยาวเท่าไรก็ลง DB ได้ | D6: "จำกัดความยาวฝั่ง server" · issue #6 (Contact length limit) · `db.ts:26–35` |
+| M3 | **`listGuestbook` ไม่มี `LIMIT`** | Query คือ `SELECT * FROM guestbook ORDER BY created_at DESC` ไม่จำกัดจำนวนแถว — ข้อมูลโตแล้วหน้า Guestbook จะหนัก | D6: "`LIMIT` จำนวนแถว" · `db.ts:93–95` |
+| M4 | **Response ของ Contact echo email กลับ** | `insertContact` คืน row เต็มรวม `email` และ `api/contact.ts:14` ส่งกลับทั้งก้อน — FE ไม่อ่าน body จึงไม่พัง แต่ email หลุดไปใน network response (เห็นใน devtools) | D5: "BE พิจารณาไม่ echo email กลับใน response" · `db.ts:80–88`, `api/contact.ts:14` |
+| M5 | **Error body อาจ leak ข้อความดิบ** | ทุก endpoint คืน `{error: err.message}` ดิบ (contact.ts:21, guestbook.ts:16/34) — FE ไม่แสดงจึงความเสี่ยงต่ำ แต่ถ้า error จาก SQLite (เช่น constraint) ข้อความจะติดรายละเอียดภายในออกไป | ห้าม "leak stack trace / SQL error" (AGENTS.md) · `api/guestbook.ts:13–19`, `api/contact.ts:18–24` |
+| M6 | **ไม่มีวิธีลบ/อ่านข้อความฝั่งเจ้าของ** | ไม่มี script/endpoint สำหรับลบข้อความ Guestbook และอ่าน/ลบ Contact (D10 กำหนด retention 90 วันด้วย script) — อยู่นอกสัญญา FE↔BE โดยตรง แต่เป็นเงื่อนไข ship | D6 ("มีวิธีลบข้อความ"), D10 ("ห้าม ship ถ้ายังไม่มีวิธีอ่าน") · scope issue #5/#6 |
 
-| รายการ | ข้อเสนอใน handoff | สิ่งที่ FE ทำจริง | สรุป |
-|---|---|---|---|
-| ชื่อ honeypot | `website` | ทั้งสองฟอร์มใช้ `name="website"` (ซ่อนด้วย `.hp`, `tabindex="-1"`, `autocomplete="off"`) | **ยืนยัน `website`** — ตรงกันแล้ว BE แค่อ่าน field นี้ |
-| guestbook maxlength | name ≤ 40 · message ≤ 500 | `maxlength="40"` / `maxlength="500"` | **ยืนยัน 40/500** — ใช้ค่าเดียวกันใน `db.ts` (นับหลัง trim) |
-| contact maxlength | name ≤ 80 · message ≤ 2000 (+ email ≤ 120 ตาม FE) | `maxlength="80"` / email `maxlength="120"` / `maxlength="2000"` | **ยืนยัน 80/120/2000** — รวม email ≤ 120 ด้วยเพราะ FE จำกัดไว้ (handoff เดิมไม่ได้ระบุ) |
-| ตัด email จาก response 201 | ตัดที่ชั้น API ไม่ใช่ `db.ts` (เพราะ `lab05-api.test.ts:25` คาด `insertContact()` คืน `row.email`) | FE ไม่อ่าน body ของ 201 เลย | **ยืนยัน: ตัดที่ `contact.ts`** — `insertContact()` คงคืน row เต็มให้ test ผ่าน ส่วน API response ส่งเฉพาะ `{ id, name, message, created_at }` หรือ `{ ok: true }` ก็ได้ (FE ไม่สน) |
+### ข้อสังเกต (ไม่ใช่ mismatch แต่ควรรู้)
 
-## 4. ข้อเสนอสั้น ๆ
+- **501 เป็น dead code ชั่วคราว**: `db.ts` implement จริงแล้ว ไม่มี `NOT_IMPLEMENTED` ถูก throw — สาขา 501 ใน `api/*.ts` ยังไม่เคยทำงาน (เก็บไว้ไม่เสียหาย เป็นสัญญาสำรอง)
+- **Header comment ของ `db.ts` เก่าแล้ว**: บรรทัด 3 เขียนว่า "Stubs return null until finishe" ทั้งที่ฟังก์ชัน insert จริงแล้ว (พิมพ์ผิด "finishe" ด้วย) — เป็นเอกสารค้างสภาพ ไม่กระทบการทำงาน
+- **`accept: application/json` บน GET guestbook**: BE ไม่สน header นี้ ตอบ JSON เสมอ — ไม่ขัดกัน แค่ไม่จำเป็น
 
-1. **ทำ honeypot ที่ชั้น route** (`contact.ts` / `guestbook.ts`) ไม่ใช่ `db.ts` — เช็ค `body.website` ก่อนเรียก insert ถ้ามีค่าตอบ `201` + `{ ok: true }` โดยไม่แตะ DB (บอตไม่รู้ว่าโดนกรอง) · `db.ts` ไม่ต้องรู้จัก field นี้
-2. **ใส่ length check ใน `normalizeText`** (หรือ helper ข้าง ๆ) ของ `db.ts` ให้ throw message สั้นที่ปลอดภัย เช่น `name too long` — จะได้ 400 ผ่านสัญญา error เดิมโดยไม่ leak อะไร
-3. **`listGuestbook` ใส่ `LIMIT 50`** และคง `ORDER BY created_at DESC` — FE จัดการ array ว่าง/ยาวอยู่แล้ว
-4. **ตอนตัด email จาก response** อย่า destructure ผิดทิ้ง `created_at` ไปด้วย — ส่ง `{ id, name, message, created_at }` ตรง ๆ ชัดเจนกว่า
-5. **วิธีลบข้อความ (D6)**: ทำเป็น `scripts/guestbook-delete.mjs <id>` ที่ใช้ `DATA_DIR` เดียวกัน ตาม handoff ข้อ 4 — ห้ามเปิด DELETE endpoint สาธารณะ
-6. **เพิ่มเทสต์ใน `tests/` (ไม่ใช่ `tests/labs/`)** ครอบ: เกิน limit → throw · honeypot มีค่า → ไม่บันทึก · contact 201 ไม่มี key `email` · แล้วรัน `npm test` + `npm run test:labs` ให้ผ่านก่อนสลับ handoff กลับ
+## 3. Suggestion — ข้อเสนอ (ยังไม่แก้โค้ด)
+
+งานทั้งหมดตกเข้าข่าย Lab 05 (BE · issue #5, #6) — เสนอให้ฝั่ง BE รับไปทำ:
+
+1. **Honeypot (M1)**: ใน `api/contact.ts` / `api/guestbook.ts` ถ้า `body.website` ไม่ว่าง → ตอบ `201` เงียบ ๆ โดย **ไม่** insert (บอทคิดว่าสำเร็จ คนจริงไม่กระทบ) — FE ส่ง field นี้มาอยู่แล้ว ไม่ต้องแก้ FE
+2. **Length limit ฝั่ง server (M2)**: เพิ่มเช็คความยาวใน `db.ts` ให้สอดคล้อง `maxlength` ของ FE (contact: name ≤ 80, email ≤ 120, message ≤ 2000 · guestbook: name ≤ 40, message ≤ 500) — เกิน → throw → 400 → FE แสดง `rejected` ได้พอดี สัญญาเดิมไม่เปลี่ยน
+3. **`LIMIT` ใน `listGuestbook` (M3)**: เช่น `ORDER BY created_at DESC LIMIT 50` — response shape `{entries: [...]}` เหมือนเดิม FE ไม่ต้องแก้
+4. **ไม่ echo email (M4)**: ใน `api/contact.ts` ตอบกลับเฉพาะ field ที่จำเป็น (เช่น `{id, name, created_at}` หรือแค่ `{ok: true}`) — FE ไม่อ่าน body อยู่แล้ว เปลี่ยนได้อิสระ
+5. **Error body (M5)**: คืนข้อความ generic (เช่น `{error: 'bad request'}` / `{error: 'server error'}`) แทน `err.message` ดิบ แล้ว log รายละเอียดไว้ฝั่ง server — สัญญา status code เดิมไม่เปลี่ยน FE ไม่กระทบ
+6. **Script อ่าน/ลบ (M6)**: ทำ script อ่าน/ลบข้อความ Contact (+ ลบของเก่ากว่า 90 วัน) และลบข้อความ Guestbook ตาม D6/D10 — เป็นไฟล์ `scripts/` แยก ไม่แตะ API สาธารณะ
+7. **(เล็ก) อัปเดต comment `db.ts:3`** ให้ตรงสถานะจริง เมื่อฝั่ง BE เข้าไปแก้ไฟล์อยู่แล้ว
+
+**สรุป**: สัญญาหลัก (method, URL, body fields, response shape, status-code mapping) ตรงกันครบ — FE ปลอดภัยต่อการเปลี่ยนแปลงทั้งหมดที่เสนอ เพราะไม่เคยอ่าน response body และแสดงเฉพาะข้อความไทยคงที่ · ช่องว่างทั้งหมดอยู่ฝั่ง BE ตามที่ D5/D6/D10 กำหนดไว้แล้ว ไม่มี mismatch ที่ต้องแก้ FE
