@@ -2,7 +2,7 @@
  * SQLite helpers for contact + guestbook.
  * Lab 05 (OpenCode) implements persistence. Stubs return null until finishe.
  */
-import Database from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -21,13 +21,24 @@ export type GuestbookEntry = {
   created_at: string;
 };
 
-let db: Database.Database | null = null;
+let db: DatabaseSync | null = null;
 
-export function getDb(): Database.Database {
+function normalizeText(value: unknown, field: string): string {
+  if (typeof value !== 'string') {
+    throw new Error(`${field} must be a string`);
+  }
+  const text = value.trim();
+  if (!text) {
+    throw new Error(`${field} is required`);
+  }
+  return text;
+}
+
+export function getDb(): DatabaseSync {
   if (db) return db;
   const dir = process.env.DATA_DIR || join(process.cwd(), 'data');
   mkdirSync(dir, { recursive: true });
-  db = new Database(join(dir, 'site.sqlite'));
+  db = new DatabaseSync(join(dir, 'site.sqlite'));
   db.exec(`
     CREATE TABLE IF NOT EXISTS contact_messages (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,24 +57,64 @@ export function getDb(): Database.Database {
   return db;
 }
 
-/** Stub: Lab 05 must implement validation + insert. */
-export function insertContact(_input: {
+export function insertContact(input: {
   name: string;
   email: string;
   message: string;
 }): ContactMessage {
-  throw new Error('NOT_IMPLEMENTED: insertContact — Lab 05 OpenCode');
+  const name = normalizeText(input?.name, 'name');
+  const email = normalizeText(input?.email, 'email');
+  const message = normalizeText(input?.message, 'message');
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error('email must be a valid email address');
+  }
+
+  const database = getDb();
+  const result = database
+    .prepare(
+      `INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)`
+    )
+    .run(name, email, message);
+
+  const row = database
+    .prepare('SELECT * FROM contact_messages WHERE id = ?')
+    .get(Number(result.lastInsertRowid)) as ContactMessage | undefined;
+
+  if (!row) {
+    throw new Error('could not create contact message');
+  }
+
+  return row;
 }
 
-/** Stub: Lab 05 must implement. */
 export function listGuestbook(): GuestbookEntry[] {
-  throw new Error('NOT_IMPLEMENTED: listGuestbook — Lab 05 OpenCode');
+  const database = getDb();
+  const rows = database
+    .prepare('SELECT * FROM guestbook ORDER BY created_at DESC')
+    .all() as GuestbookEntry[];
+  return rows;
 }
 
-/** Stub: Lab 05 must implement. */
-export function insertGuestbook(_input: {
+export function insertGuestbook(input: {
   name: string;
   message: string;
 }): GuestbookEntry {
-  throw new Error('NOT_IMPLEMENTED: insertGuestbook — Lab 05 OpenCode');
+  const name = normalizeText(input?.name, 'name');
+  const message = normalizeText(input?.message, 'message');
+
+  const database = getDb();
+  const result = database
+    .prepare(`INSERT INTO guestbook (name, message) VALUES (?, ?)`)
+    .run(name, message);
+
+  const row = database
+    .prepare('SELECT * FROM guestbook WHERE id = ?')
+    .get(Number(result.lastInsertRowid)) as GuestbookEntry | undefined;
+
+  if (!row) {
+    throw new Error('could not create guestbook entry');
+  }
+
+  return row;
 }
