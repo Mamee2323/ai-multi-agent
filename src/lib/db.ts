@@ -1,6 +1,7 @@
 /**
  * SQLite helpers for contact + guestbook.
- * Lab 05 (OpenCode) implements persistence. Stubs return null until finishe.
+ * Persistence (Lab 00 template) + server-side safeguards (Lab 05):
+ * length limits, guestbook list LIMIT. Honeypot / response shaping lives in api/*.ts.
  */
 import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
@@ -23,13 +24,16 @@ export type GuestbookEntry = {
 
 let db: DatabaseSync | null = null;
 
-function normalizeText(value: unknown, field: string): string {
+function normalizeText(value: unknown, field: string, max?: number): string {
   if (typeof value !== 'string') {
     throw new Error(`${field} must be a string`);
   }
   const text = value.trim();
   if (!text) {
     throw new Error(`${field} is required`);
+  }
+  if (max !== undefined && text.length > max) {
+    throw new Error(`${field} must be at most ${max} characters`);
   }
   return text;
 }
@@ -62,9 +66,9 @@ export function insertContact(input: {
   email: string;
   message: string;
 }): ContactMessage {
-  const name = normalizeText(input?.name, 'name');
-  const email = normalizeText(input?.email, 'email');
-  const message = normalizeText(input?.message, 'message');
+  const name = normalizeText(input?.name, 'name', 80);
+  const email = normalizeText(input?.email, 'email', 120);
+  const message = normalizeText(input?.message, 'message', 2000);
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw new Error('email must be a valid email address');
@@ -90,8 +94,11 @@ export function insertContact(input: {
 
 export function listGuestbook(): GuestbookEntry[] {
   const database = getDb();
+  // LIMIT 50 = newest rows only (D6) — response shape { entries: [...] } unchanged.
   const rows = database
-    .prepare('SELECT * FROM guestbook ORDER BY created_at DESC')
+    .prepare(
+      'SELECT * FROM guestbook ORDER BY created_at DESC, id DESC LIMIT 50'
+    )
     .all() as GuestbookEntry[];
   return rows;
 }
@@ -100,8 +107,8 @@ export function insertGuestbook(input: {
   name: string;
   message: string;
 }): GuestbookEntry {
-  const name = normalizeText(input?.name, 'name');
-  const message = normalizeText(input?.message, 'message');
+  const name = normalizeText(input?.name, 'name', 40);
+  const message = normalizeText(input?.message, 'message', 500);
 
   const database = getDb();
   const result = database
