@@ -9,10 +9,13 @@ Last updated: 2026-09-25 +07:00
 |---|---|---|---|---|---|
 | L2 | Guestbook เกณฑ์ BE: length limit ฝั่ง server · `LIMIT` แถว · honeypot · วิธีลบข้อความ | OpenCode | P0 | Lab 05 | #5 · D6 — ไม่ครบก่อน ship = ซ่อนลิงก์ Guestbook |
 | L3 | Contact: length limit + ไม่ echo email ใน response 201 | OpenCode | P1 | Lab 05 | #6 · D5 · ทำที่ `contact.ts` (lab test คาด `insertContact` คืน email) · ดู handoff `04-claude-to-opencode.md` |
-| L4 | เจ้าของจะอ่านข้อความ Contact ยังไง / ทุกกี่วัน · เก็บข้อมูลผู้เยี่ยมนานแค่ไหน | human | P1 | ก่อน Lab 08 Ship | Devil คำถามข้อ 1, 3 · ตอบแล้วบันทึกเป็น D-id |
+| L4 | ยืนยันจังหวะอ่านข้อความ Contact (เริ่มต้นสัปดาห์ละครั้ง) + retention (เริ่มต้น 90 วัน) | human | P0 | ก่อน Lab 08 Ship | D10 — ห้าม ship ถ้ายังไม่มีวิธีอ่าน |
 | L5 | ย้าย `## Brainstorm` ออกจาก PROFILE.md (ไฟล์ถูก copy ลง runtime image) | Claude | P2 | ก่อนทำ `llms.txt` | reviewer Should · ไม่ render อยู่แล้ว |
-| L8 | `profile.ts` FALLBACK มี "Personal branding site" + อังกฤษ "coming soon" (ขัด D3 ถ้า PROFILE หาย) | Claude | P2 | ก่อน Lab 08 | frontend แจ้ง · ไฟล์ `src/lib/` |
+| L8 | FALLBACK ใน `profile.ts` → ข้อความไทยกลาง ๆ ไม่มี "Personal branding site"/อังกฤษ | Claude | P1 | ก่อน Lab 08 | D12 |
 | L9 | ตั้ง `SITE_URL` จริง (JSON-LD `url` ตอนนี้ = localhost) | human | P1 | Lab 08 | D8 |
+| L10 | BE: script อ่าน/ลบข้อความ Contact + ลบของเก่า 90 วัน | OpenCode | P0 | Lab 05 | D10 · ต่อ scope #6 หรือ issue ใหม่ |
+| L11 | `robots.txt` กัน `/api/` + `/guestbook` | Claude | P2 | ก่อน Lab 08 | D13 |
+| L12 | QA มือถือ 360px ไม่มี scroll แนวนอน | Claude/Playwright | P1 | Lab 06 | D14 |
 | L6 | smoke test ผูกกับเนื้อหาจริงของ PROFILE → ใช้ fixture | Claude | P2 | ว่างเมื่อไหร่ | reviewer Should |
 
 ## ปิดแล้ว (ย่อ — ย้ายหรือลบได้เมื่อรก)

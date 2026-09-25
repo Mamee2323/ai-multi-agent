@@ -13,7 +13,7 @@ Updated by: Claude (Lab 04)
 ## Done
 
 - Lab 00 init · Lab 01 PROFILE (parser อ่าน section หลายบรรทัดได้แล้ว — `ca5204e`)
-- Lab 02: `DEBATE.md` ครบ 3 มุม (Brand Strategist · UX Critic · Devil's Advocate)
+- Lab 02: `DEBATE.md` ครบ 3 มุม (Brand Strategist · UX Critic · Devil's Advocate) + รอบ 2 จำลองทีม → D10–D14
 - `DECISIONS.md` D1–D9 · PROFILE แก้ Headline + Tone ตาม D1/D2
 - Lab 03: issues #1–#6 (gh) + #8 (GitHub MCP) · `## Lab 03 — MCP vs gh` ใน DECISIONS
 - Lab 04: UI 5 หน้า (branch `lab-04-frontend`) ครอบ #1–#4 + D8 · `docs/fe-be-contract-check.md` (OpenCode) ไม่มี mismatch ฝั่ง FE

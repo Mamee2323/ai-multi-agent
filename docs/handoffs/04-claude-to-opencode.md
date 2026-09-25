@@ -45,6 +45,7 @@ Status: NEEDS_REVIEW (FE เสร็จ — ส่งต่อให้ BE impl
 
 1. #5 Guestbook: length limit ใน `db.ts` · `LIMIT 50` · honeypot ที่ route · `scripts/guestbook-delete.mjs <id>`
 2. #6 Contact: length limit · response 201 ไม่มี `email`
+   - **เพิ่มจาก D10 (รอบ 2, หลังเขียน handoff นี้):** script อ่าน/ลบข้อความ Contact + ลบของเก่ากว่า 90 วัน · ไม่มี endpoint สาธารณะ · OPEN_LOOPS L10
 3. คงสัญญา error API (`NOT_IMPLEMENTED` → 501 · POST error → 400 · GET error → 500 · สำเร็จ → 201 · guestbook GET → `{ entries: [...] }`)
 4. เทสต์ใน `tests/`: เกิน limit → 400 · honeypot → ไม่บันทึก · contact 201 ไม่มี key `email` · `npm test` + `npm run test:labs` ต้องผ่าน
 5. Lab 05: call FE ตรวจฟอร์มตาม README ของ Lab 05 · เปิด PR อ้าง `Closes #5` `Closes #6`
