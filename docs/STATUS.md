@@ -3,12 +3,12 @@
 > คัดลอกเป็น `docs/STATUS.md` ใน Lab 00 · อ่านทุก session · **สั้น** · single-writer ต่อรอบ  
 > ดู [`COURSE.md`](../COURSE.md) ชั้น State (Hot)
 
-Last updated: 2026-09-25 15:30 +07:00  
-Updated by: Claude `frontend` (เริ่ม Lab 06)
+Last updated: 2026-09-25 15:45 +07:00  
+Updated by: Claude `frontend` (Lab 06 QA)
 
 ## Current goal
 
-- Lab 04 + Lab 05 **merge ขึ้น main แล้ว** — ถัดไป Lab 06 QA (Claude/Playwright)
+- Lab 06 QA หลักฐานครบ (`docs/QA.md` + 4 screenshots) — รอผู้ใช้ยืนยัน diff P0-1/P1-1 แล้วไป Lab 07 Review
 
 ## Done
 
@@ -25,12 +25,12 @@ Updated by: Claude `frontend` (เริ่ม Lab 06)
   - M6 `scripts/guestbook-delete.mjs <id>` + `scripts/contact-manage.mjs list|delete|purge [--days 90]` (D10)
   - เทสต์ใหม่ `tests/api-safeguards.test.ts` (9 tests · รันใน CI) · smoke จริงผ่าน curl (201/400/200 ตรงสัญญา)
 - Lab 05b swarm: รอบ 1 OpenCode 7/20 (API) · รอบ 2 Claude 15/20 (ฟอร์มจริงในเบราว์เซอร์ทุกเคสผ่าน) — `docs/SWARM.md`
+- Lab 06 QA: E2E ผ่าน Playwright MCP 14/14 step (5 หน้า · ฟอร์ม contact/guestbook demo · 360px ไม่มี scroll แนวนอน · skip link) · a11y debate + action items P0/P1/P2 ใน `docs/QA.md`
 - Issues: #5, #6 ปิดโดย PR #10 (state: completed) · #9 ปิดเป็น superseded (not_planned · rate limit ไปตัดสินที่ L13)
 
 ## In progress
 
-- Lab 06 QA (Claude) บน branch `lab-06-qa` — ยังไม่เริ่ม E2E: Playwright MCP หลุดในเซสชันก่อนและ reconnect ไม่ติด → เริ่มเซสชันใหม่ (`claude` ไม่ใช่ `--continue`) · `docs/screenshots/` ยังว่าง
-- พบระหว่างอ่าน: `playwright/smoke.spec.ts` หา label อังกฤษ `Name`/`Email`/`Message` แต่หน้าเว็บเป็นไทย → `npm run test:e2e` จะ fail · จดเป็น action item ใน QA.md
+- รอยืนยัน diff ที่เสนอใน `docs/QA.md`: P0-1 `playwright/smoke.spec.ts` label ไทย · P1-1 `aria-invalid` ใน contact.astro
 
 ## Blocked
 
@@ -38,12 +38,12 @@ Updated by: Claude `frontend` (เริ่ม Lab 06)
 
 ## Next actions
 
-1. Lab 06 QA (Claude/Playwright): E2E ใน `playwright/` (ต่อยอดเคสจาก `SWARM.md` รอบ 2 · browser: `npx playwright install` หรือ `channel: 'msedge'`) + ตัดสิน #9→L13 (rate limit ยังไม่มี D-id) ที่ review
-2. ตรวจ a11y + มือถือ 360px ทั้ง 5 หน้า (L12)
+1. ยืนยัน + แก้ P0-1 / P1-1 (Claude) → `npm test` + `npm run test:e2e` (`channel: 'msedge'` หรือ `npx playwright install`)
+2. Lab 07 review — ตัดสิน L13 (#9 rate limit)
 
 ## Files changed in latest session
 
-- ไม่มีการแก้โค้ด — `docs/SWARM.md` (รอบ 2) · ไฟล์นี้ + OPEN_LOOPS
+- `docs/QA.md` (ใหม่) · `docs/screenshots/01–04*.png` · ไฟล์นี้ + OPEN_LOOPS — ไม่แก้ `src/`
 
 ## Notes
 
