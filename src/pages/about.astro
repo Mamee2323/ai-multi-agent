@@ -2,13 +2,22 @@
 export const prerender = false;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadProfile } from '../lib/profile';
+import { bioParagraphs, splitName } from '../components/profile-view';
+
 const profile = loadProfile();
+const { primary } = splitName(profile.name);
+const paragraphs = bioParagraphs(profile.bio);
 ---
-<BaseLayout title={`About · ${profile.name}`}>
+<BaseLayout
+  title={`เกี่ยวกับฉัน · ${primary}`}
+  description={`รู้จัก ${primary} ให้มากขึ้น — คนธรรมดาที่ชอบเรียนรู้ ทั้งเรื่องเทคและเรื่องชีวิตประจำวัน`}
+>
   <article class="card">
-    <h1>About</h1>
-    <p>{profile.bio}</p>
-    <p>เรื่องราวเพิ่มเติม — timeline, skills และลิงก์จะอัปเดตเร็ว ๆ นี้</p>
+    <h1>เกี่ยวกับฉัน</h1>
+    {paragraphs.map((p) => <p>{p}</p>)}
+    <div class="actions">
+      <a class="button" href="/interests">ดูสิ่งที่ฉันสนใจ</a>
+      <a class="button button-secondary" href="/guestbook">แวะเขียนสมุดเยี่ยม</a>
+    </div>
   </article>
 </BaseLayout>
-

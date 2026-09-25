@@ -1,46 +1,162 @@
 ---
 export const prerender = false;
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { loadProfile } from '../lib/profile';
+import { splitName } from '../components/profile-view';
+
+const { primary } = splitName(loadProfile().name);
 ---
-<BaseLayout title="Guestbook">
-  <section class="card">
-    <h1>Guestbook</h1>
-    <p>ฝากข้อความไว้ได้ทางฟอร์มนี้ — อ่าน/เขียนผ่าน <code>/api/guestbook</code></p>
-    <form id="gb-form">
-      <label for="name">Name</label>
-      <input id="name" name="name" required maxlength="80" />
-      <label for="message">Message</label>
-      <textarea id="message" name="message" rows="3" required maxlength="500"></textarea>
-      <p style="margin-top:1rem"><button type="submit">Sign</button></p>
+<BaseLayout
+  title={`สมุดเยี่ยม · ${primary}`}
+  description={`สมุดเยี่ยมของ ${primary} — ฝากคำทักทายสั้น ๆ ไว้ให้กันได้`}
+  noindex
+>
+  <section class="card" aria-labelledby="gb-title">
+    <h1 id="gb-title">สมุดเยี่ยม</h1>
+    <p>ขอบคุณที่แวะมานะคะ ฝากคำทักทายสั้น ๆ ไว้ได้เลยค่ะ</p>
+    <p><strong>ข้อความในสมุดเยี่ยม ทุกคนที่เข้าเว็บจะเห็นนะคะ</strong> รบกวนอย่าพูดถึงชื่อจริง ที่ทำงาน หรือที่อยู่ของฉัน และอย่าใส่ข้อมูลส่วนตัวของตัวเองด้วยค่ะ ถ้าอยากคุยเรื่องส่วนตัว ส่งมาทาง<a href="/contact">หน้าติดต่อ</a>ได้นะคะ</p>
+
+    <form id="gb-form" novalidate>
+      <label for="gb-name">ชื่อเล่น หรือนามแฝง</label>
+      <input id="gb-name" name="name" required maxlength="40" autocomplete="nickname" />
+
+      <label for="gb-message">ข้อความ</label>
+      <textarea id="gb-message" name="message" rows="3" required maxlength="500"></textarea>
+
+      <div class="hp" aria-hidden="true">
+        <label for="gb-website">เว็บไซต์ (เว้นว่างไว้)</label>
+        <input id="gb-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <p class="form-actions"><button type="submit">ฝากข้อความ</button></p>
+      <p id="gb-status" class="status" role="status" aria-live="polite"></p>
     </form>
-    <div id="entries" class="card" style="margin-top:1.25rem" aria-live="polite">Loading…</div>
+  </section>
+
+  <section class="card" aria-labelledby="entries-title">
+    <h2 id="entries-title">ข้อความจากเพื่อน ๆ</h2>
+    <p id="gb-list-status" class="status" data-state="busy" aria-live="polite">กำลังโหลดข้อความค่ะ…</p>
+    <ul id="gb-entries" class="entries"></ul>
   </section>
 </BaseLayout>
 <script>
-  const entries = document.getElementById('entries');
-  const form = document.getElementById('gb-form');
-  async function load() {
-    const res = await fetch('/api/guestbook');
-    const data = await res.json();
-    if (!res.ok) {
-      entries.textContent = data.error || `HTTP ${res.status}`;
-      return;
-    }
-    entries.innerHTML = (data.entries || [])
-      .map((e) => `<p><strong>${e.name}</strong>: ${e.message}<br/><small>${e.created_at}</small></p>`)
-      .join('') || '<p>No entries yet.</p>';
+  // User content is rendered with createElement + textContent only — never
+  // parsed as HTML — so a message can't inject markup or scripts.
+  type Entry = { id?: number; name?: unknown; message?: unknown; created_at?: unknown };
+
+  const form = document.getElementById('gb-form') as HTMLFormElement | null;
+  const status = document.getElementById('gb-status');
+  const listStatus = document.getElementById('gb-list-status');
+  const list = document.getElementById('gb-entries');
+
+  // Friendly fixed messages only — never show the server's error text.
+  const MSG = {
+    loadFail: 'ตอนนี้ยังโหลดข้อความไม่ได้ค่ะ ลองรีเฟรชอีกครั้งนะคะ',
+    empty: 'ยังไม่มีใครฝากข้อความเลยค่ะ มาเป็นคนแรกกันไหมคะ',
+    busy: 'กำลังฝากข้อความค่ะ…',
+    ok: 'ฝากข้อความแล้วค่ะ ขอบคุณที่แวะมาทักทายนะคะ',
+    invalid: 'รบกวนกรอกชื่อและข้อความให้ครบก่อนนะคะ',
+    rejected: 'ฝากข้อความไม่สำเร็จค่ะ ลองเช็คความยาวข้อความ แล้วส่งใหม่อีกครั้งนะคะ',
+    unavailable: 'ตอนนี้สมุดเยี่ยมยังรับข้อความไม่ได้ค่ะ ขอโทษด้วยนะคะ ลองใหม่อีกครั้งภายหลังนะคะ',
+    network: 'ส่งไม่สำเร็จค่ะ ลองเช็คอินเทอร์เน็ตแล้วส่งใหม่อีกครั้งนะคะ',
+  };
+
+  function setStatus(el: HTMLElement | null, text: string, state: 'busy' | 'ok' | 'error' | 'info') {
+    if (!el) return;
+    el.textContent = text;
+    el.dataset.state = state;
+    el.hidden = text === '';
   }
+
+  function formatTime(value: unknown): { text: string; iso?: string } {
+    const raw = typeof value === 'string' ? value : '';
+    if (!raw) return { text: '' };
+    // SQLite datetime('now') is UTC "YYYY-MM-DD HH:MM:SS" without a zone.
+    const iso = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(raw) ? `${raw.replace(' ', 'T')}Z` : raw;
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return { text: raw };
+    return {
+      text: d.toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' }),
+      iso: d.toISOString(),
+    };
+  }
+
+  function renderEntry(entry: Entry): HTMLLIElement {
+    const li = document.createElement('li');
+    li.className = 'entry';
+
+    const name = document.createElement('p');
+    name.className = 'entry-name';
+    name.textContent = String(entry.name ?? '');
+
+    const message = document.createElement('p');
+    message.className = 'entry-message';
+    message.textContent = String(entry.message ?? '');
+
+    li.append(name, message);
+
+    const t = formatTime(entry.created_at);
+    if (t.text) {
+      const time = document.createElement('time');
+      time.className = 'entry-time';
+      if (t.iso) time.dateTime = t.iso;
+      time.textContent = t.text;
+      li.append(time);
+    }
+    return li;
+  }
+
+  async function load() {
+    if (!list) return;
+    try {
+      const res = await fetch('/api/guestbook', { headers: { accept: 'application/json' } });
+      if (!res.ok) throw new Error('load failed');
+      const data = await res.json();
+      const entries: Entry[] = Array.isArray(data?.entries) ? data.entries : [];
+      list.replaceChildren(...entries.map(renderEntry));
+      setStatus(listStatus, entries.length ? '' : MSG.empty, 'info');
+    } catch {
+      setStatus(listStatus, MSG.loadFail, 'error');
+    }
+  }
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const payload = Object.fromEntries(new FormData(form).entries());
-    await fetch('/api/guestbook', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    form.reset();
-    await load();
+    if (!form.checkValidity()) {
+      setStatus(status, MSG.invalid, 'error');
+      form.reportValidity();
+      return;
+    }
+    const fd = new FormData(form);
+    const payload = {
+      name: String(fd.get('name') ?? '').trim(),
+      message: String(fd.get('message') ?? '').trim(),
+      website: String(fd.get('website') ?? ''),
+    };
+    const button = form.querySelector('button');
+    if (button) button.disabled = true;
+    setStatus(status, MSG.busy, 'busy');
+    try {
+      const res = await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setStatus(status, MSG.ok, 'ok');
+        form.reset();
+        await load();
+      } else if (res.status >= 500) {
+        setStatus(status, MSG.unavailable, 'error');
+      } else {
+        setStatus(status, MSG.rejected, 'error');
+      }
+    } catch {
+      setStatus(status, MSG.network, 'error');
+    } finally {
+      if (button) button.disabled = false;
+    }
   });
+
   load();
 </script>
-

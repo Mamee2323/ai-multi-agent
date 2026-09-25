@@ -2,21 +2,39 @@
 export const prerender = false;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { loadProfile } from '../lib/profile';
+import { bioParagraphs, splitName, toInterests } from '../components/profile-view';
+
 const profile = loadProfile();
+const { primary, alternate } = splitName(profile.name);
+const firstParagraph = bioParagraphs(profile.bio)[0] ?? '';
+const interests = toInterests(profile.interests);
 ---
-<BaseLayout title={`${profile.name} · Home`} description={profile.headline}>
-  <section class="card">
-    <p style="margin:0;color:var(--accent);font-weight:700">Personal branding site</p>
-    <h1>{profile.name}</h1>
-    <p style="font-size:1.2rem;color:var(--text)">{profile.headline}</p>
-    <p>{profile.bio}</p>
-    <p><strong>Audience:</strong> {profile.audience}</p>
+<BaseLayout title={`หน้าแรก · ${primary}`} description={`${primary} — ${profile.headline}`}>
+  <section class="card hero" aria-labelledby="hero-title">
+    <h1 id="hero-title">
+      {primary}{alternate && <span class="alt-name" lang="en">{alternate}</span>}
+    </h1>
+    <p class="lead">{profile.headline}</p>
+    {firstParagraph && <p>{firstParagraph}</p>}
+    <p><a href="/about">อ่านเรื่องของฉันต่อได้ที่หน้าเกี่ยวกับฉันค่ะ</a></p>
   </section>
-  <section class="grid">
-    <a class="card" href="/about"><h2>About</h2><p>เรื่องราวและเส้นทาง</p></a>
-    <a class="card" href="/interests"><h2>Interests</h2><p>หัวข้อที่สนใจ</p></a>
-    <a class="card" href="/contact"><h2>Contact</h2><p>ส่งข้อความถึงฉัน</p></a>
-    <a class="card" href="/guestbook"><h2>Guestbook</h2><p>ฝากคำทักทาย</p></a>
+
+  <section class="card" aria-labelledby="interests-title">
+    <h2 id="interests-title">สิ่งที่ฉันกำลังสนใจ</h2>
+    <p>หัวข้อที่ฉันกำลังหัดอยู่ และตั้งใจจะค่อย ๆ มาเล่าให้ฟังค่ะ</p>
+    <ul class="interest-grid">
+      {interests.map((item) => (
+        <li><a class="interest-card" href={`/interests#${item.slug}`}>{item.label}</a></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="card" aria-labelledby="cta-title">
+    <h2 id="cta-title">แวะทักทายกันได้นะคะ</h2>
+    <p>ผ่านมาแล้วอยากทักทาย ฝากข้อความไว้ในสมุดเยี่ยมได้เลยค่ะ ถ้าอยากคุยกับฉันแบบส่วนตัว ใช้หน้าติดต่อได้นะคะ</p>
+    <div class="actions">
+      <a class="button" href="/guestbook">เขียนสมุดเยี่ยม</a>
+      <a class="button button-secondary" href="/contact">ส่งข้อความถึงฉัน</a>
+    </div>
   </section>
 </BaseLayout>
-
